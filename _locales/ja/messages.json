@@ -1,0 +1,76 @@
+﻿{
+  "extensionDescription": {
+    "message": "サイドバーの中でリンクを開きます。",
+    "description": "拡張機能説明。"
+  },
+
+  "extensionName": {
+    "message": "サイドバーで開く",
+    "description": "拡張機能名。"
+  },
+
+  "openingProtocolHttpFromAudio": {
+    "message": "httpを使用する(音声)",
+    "description": "httpの指定(音声)"
+  },
+
+  "openingProtocolHttpFromImage": {
+    "message": "httpを使用する(画像)",
+    "description": "httpの指定(画像)"
+  },
+
+  "openingProtocolHttpFromLink": {
+    "message": "httpを使用する(リンク)",
+    "description": "httpの指定(リンク)"
+  },
+
+  "openingProtocolHttpFromSelection": {
+    "message": "httpを使用する(選択文字)",
+    "description": "httpの指定(選択文字)"
+  },
+
+  "openingProtocolHttpFromVideo": {
+    "message": "httpを使用する(動画)",
+    "description": "httpの指定(動画)"
+  },
+
+  "openingProtocolHttpsFromAudio": {
+    "message": "httpsを使用する(音声)",
+    "description": "httpsの指定(音声)"
+  },
+
+  "openingProtocolHttpsFromImage": {
+    "message": "httpsを使用する(画像)",
+    "description": "httpsの指定(画像)"
+  },
+
+  "openingProtocolHttpsFromLink": {
+    "message": "httpsを使用する(リンク)",
+    "description": "httpsの指定(リンク)"
+  },
+
+  "openingProtocolHttpsFromSelection": {
+    "message": "httpsを使用する(選択文字)",
+    "description": "httpsの指定(選択文字)"
+  },
+
+  "openingProtocolHttpsFromVideo": {
+    "message": "httpsを使用する(動画)",
+    "description": "httpsの指定(動画)"
+  },
+
+  "tutorial": {
+    "message": "使い方を開く",
+    "description": "拡張機能の使い方へのリンクを開く"
+  },
+
+  "url_error.html": {
+    "message": "/error_ja.html",
+    "description": "エラーページ。"
+  },
+
+  "url_index.html": {
+    "message": "/index_ja.html",
+    "description": "拡張機能の使い方。"
+  }
+}
