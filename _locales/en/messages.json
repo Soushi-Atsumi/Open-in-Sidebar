@@ -1,0 +1,76 @@
+{
+  "extensionDescription": {
+    "message": "Open a link in the sidebar.",
+    "description": "Description of the extension."
+  },
+
+  "extensionName": {
+    "message": "Open in Sidebar",
+    "description": "Name of the extension."
+  },
+
+  "openingProtocolHttpFromAudio": {
+    "message": "Use http(Audio)",
+    "description": "Specify http(Audio)"
+  },
+
+  "openingProtocolHttpFromImage": {
+    "message": "Use http(Image)",
+    "description": "Specify http(Image)"
+  },
+
+  "openingProtocolHttpFromLink": {
+    "message": "Use http(Link)",
+    "description": "Specify http(Link)"
+  },
+
+  "openingProtocolHttpFromSelection": {
+    "message": "Use http(Selection)",
+    "description": "Specify http(Selection)"
+  },
+
+  "openingProtocolHttpFromVideo": {
+    "message": "Use http(Video)",
+    "description": "Specify http(Video)"
+  },
+
+  "openingProtocolHttpsFromAudio": {
+    "message": "Use https(Audio)",
+    "description": "Specify https(Audio)"
+  },
+
+  "openingProtocolHttpsFromImage": {
+    "message": "Use https(Image)",
+    "description": "Specify https(Image)"
+  },
+
+  "openingProtocolHttpsFromLink": {
+    "message": "Use https(Link)",
+    "description": "Specify https(Link)"
+  },
+
+  "openingProtocolHttpsFromSelection": {
+    "message": "Use https(Selection)",
+    "description": "Specify https(Selection)"
+  },
+
+  "openingProtocolHttpsFromVideo": {
+    "message": "Use https(Video)",
+    "description": "Specify https(Video)"
+  },
+
+  "tutorial": {
+    "message": "Open a tutorial",
+    "description": "Open a link of a tutorial"
+  },
+
+  "url_error.html": {
+    "message": "/error.html",
+    "description": "An error page."
+  },
+
+  "url_index.html": {
+    "message": "/index.html",
+    "description": "Tutorial of the extension."
+  }
+}
