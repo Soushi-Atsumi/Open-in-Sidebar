@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<!--
+	Open in Sidebar - Very simple and useful extension. You can open a link in the sidebar.
+	Copyright (c) 2018 Soushi Atsumi. All rights reserved.
+
+	This Source Code Form is subject to the terms of the Mozilla Public
+	License, v. 2.0. If a copy of the MPL was not distributed with this
+	file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+	This Source Code Form is "Incompatible With Secondary Licenses", as
+	defined by the Mozilla Public License, v. 2.0.
+ -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+</head>
+<body>
+	<form name="options">
+		<fieldset>
+			<legend id="protocolLegend"></legend>
+			<input type="radio" id="protocol-ask" name="protocol" checked="checked"><label id="askProtocolLabel"></label><br />
+			<input type="radio" id="protocol-http" name="protocol"><label id="alwaysUsesHttpLabel"></label><br />
+			<input type="radio" id="protocol-https" name="protocol"><label id="alwaysUsesHttpsLabel"></label><br />
+		</fieldset>
+		<fieldset>
+			<legend id="targetLegend"></legend>
+			<input type="radio" id="target-ask" name="target" checked="checked"><label id="askTargetLabel"></label><br />
+			<input type="radio" id="target-specify" name="target"><label id="specifyTargetLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-link" checked disabled><label id="openFromLinkLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-selection" checked disabled><label id="openFromSelectionLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-view-source-link" checked disabled><label id="viewSourceFromLinkLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-view-source-selection" checked disabled><label id="viewSourceFromSelectionLabel"></label>
+		</fieldset><br />
+	</form>
+	<script src="options.js"></script>
+</body>
+</html>

@@ -1,16 +1,16 @@
-# ƒTƒCƒhƒo[‚ÅŠJ‚­
+ï»¿# ã‚µã‚¤ãƒ‰ãƒãƒ¼ã§é–‹ã
 [Click here to see English README.md](README.md)
 
-’Pƒ‚Å”ñí‚ÉŽg‚¢ˆÕ‚¢Šg’£‹@”\BƒŠƒ“ƒN‚ðƒTƒCƒhƒo[‚Ì’†‚ÅŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+å˜ç´”ã§éžå¸¸ã«ä½¿ã„æ˜“ã„æ‹¡å¼µæ©Ÿèƒ½ã€‚ãƒªãƒ³ã‚¯ã‚’ã‚µã‚¤ãƒ‰ãƒãƒ¼ã®ä¸­ã§é–‹ãã“ã¨ãŒã§ãã¾ã™ã€‚
 
-# ƒCƒ“ƒXƒg[ƒ‹
-‚±‚Ìƒy[ƒW‚És‚Á‚Ä [ƒTƒCƒhƒo[‚ÅŠJ‚­](https://addons.mozilla.org/ja/firefox/addon/open_in_sidebar/) Firefox‚Å‚±‚ÌŠg’£‹@”\‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‰º‚³‚¢B
+# ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
+ã“ã®ãƒšãƒ¼ã‚¸ã«è¡Œã£ã¦ [ã‚µã‚¤ãƒ‰ãƒãƒ¼ã§é–‹ã](https://addons.mozilla.org/ja/firefox/addon/open_in_sidebar/) Firefoxã§ã“ã®æ‹¡å¼µæ©Ÿèƒ½ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¦ä¸‹ã•ã„ã€‚
 
-# Žg‚¢•û
-Šg’£‹@”\‚ÌƒCƒ“ƒXƒg[ƒ‹ŒãA ƒTƒCƒhƒo[‚ðŠJ‚­‚±‚Æ‚ÅŽg‚¢•û‚ðŠm”F‚·‚é‚±‚Æ‚ªo—ˆ‚Ü‚·B
+# ä½¿ã„æ–¹
+æ‹¡å¼µæ©Ÿèƒ½ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å¾Œã€ ã‚µã‚¤ãƒ‰ãƒãƒ¼ã‚’é–‹ãã“ã¨ã§ä½¿ã„æ–¹ã‚’ç¢ºèªã™ã‚‹ã“ã¨ãŒå‡ºæ¥ã¾ã™ã€‚
 
-# ƒ‰ƒCƒZƒ“ƒX
-‚±‚ÌƒvƒƒWƒFƒNƒg‚ÍMozilla Public License Version 2.0‚Ì‰º‚Åƒ‰ƒCƒZƒ“ƒX‚³‚ê‚Ä‚¢‚Ü‚· - Ú‚µ‚­‚Í[LICENSE.txt](LICENSE.txt)(‰pŒê)‚ðŒ©‚Ä‚­‚¾‚³‚¢B
+# ãƒ©ã‚¤ã‚»ãƒ³ã‚¹
+ã“ã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã¯Mozilla Public License Version 2.0ã®ä¸‹ã§ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã•ã‚Œã¦ã„ã¾ã™ - è©³ã—ãã¯[LICENSE.txt](LICENSE.txt)(è‹±èªž)ã‚’è¦‹ã¦ãã ã•ã„ã€‚
 
-# ‹¦—ÍŽÒ
-ƒCƒ‰ƒXƒg: miya
+# å”åŠ›è€…
+ã‚¤ãƒ©ã‚¹ãƒˆ: miya

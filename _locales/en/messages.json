@@ -1,76 +1,199 @@
-{
-  "extensionDescription": {
-    "message": "Open a link in the sidebar.",
-    "description": "Description of the extension."
-  },
+﻿{
+	"alwaysUsesHttp": {
+		"message": "Always use http"
+	},
 
-  "extensionName": {
-    "message": "Open in Sidebar",
-    "description": "Name of the extension."
-  },
+	"alwaysUsesHttps": {
+		"message": "Always use https"
+	},
 
-  "openingProtocolHttpFromAudio": {
-    "message": "Use http(Audio)",
-    "description": "Specify http(Audio)"
-  },
+	"ask": {
+		"message": "Ask"
+	},
 
-  "openingProtocolHttpFromImage": {
-    "message": "Use http(Image)",
-    "description": "Specify http(Image)"
-  },
+	"errorHTMLTitle": {
+		"message": "Error",
+		"description": "The title of error.html."
+	},
 
-  "openingProtocolHttpFromLink": {
-    "message": "Use http(Link)",
-    "description": "Specify http(Link)"
-  },
+	"extensionDescription": {
+		"message": "Open a link in the sidebar.",
+		"description": "Description of the extension."
+	},
 
-  "openingProtocolHttpFromSelection": {
-    "message": "Use http(Selection)",
-    "description": "Specify http(Selection)"
-  },
+	"extensionName": {
+		"message": "Open in Sidebar",
+		"description": "Name of the extension."
+	},
 
-  "openingProtocolHttpFromVideo": {
-    "message": "Use http(Video)",
-    "description": "Specify http(Video)"
-  },
+	"iconImageAlt": {
+		"message": "The icon of this extension.",
+		"description": "The alternate description of the icon of this extention."
+	},
 
-  "openingProtocolHttpsFromAudio": {
-    "message": "Use https(Audio)",
-    "description": "Specify https(Audio)"
-  },
+	"indexHTMLCaution": {
+		"message": "Caution: In case of selecting url which has https, https will be used even if you select http.",
+		"description": "Cautions of this extention."
+	},
 
-  "openingProtocolHttpsFromImage": {
-    "message": "Use https(Image)",
-    "description": "Specify https(Image)"
-  },
+	"indexHTMLHeading1": {
+		"message": "1.Right click a link or right click selected characters, then choose \"Open in Sidebar\".",
+		"description": "The first heading of index.html."
+	},
 
-  "openingProtocolHttpsFromLink": {
-    "message": "Use https(Link)",
-    "description": "Specify https(Link)"
-  },
+	"indexHTMLHeading2": {
+		"message": "2.Choose the type what you want to open and open the link(choose https if you are not sure).",
+		"description": "The second heading of index.html."
+	},
 
-  "openingProtocolHttpsFromSelection": {
-    "message": "Use https(Selection)",
-    "description": "Specify https(Selection)"
-  },
+	"indexHTMLOthers": {
+		"message": "Ex: You can open audio, an image and a video in the sidebar.",
+		"description": "others of index.html"
+	},
 
-  "openingProtocolHttpsFromVideo": {
-    "message": "Use https(Video)",
-    "description": "Specify https(Video)"
-  },
+	"indexHTMLTitle": {
+		"message": "Tutorial",
+		"description": "The title of index.html."
+	},
 
-  "tutorial": {
-    "message": "Open a tutorial",
-    "description": "Open a link of a tutorial"
-  },
+	"indexHTMLTutorialVideo": {
+		"message": "https://drive.google.com/file/d/14tn0lZpNIybOt94NmpdqJvWPlKlnLjCm/view",
+		"description": "The url of tutorial video."
+	},
 
-  "url_error.html": {
-    "message": "/error.html",
-    "description": "An error page."
-  },
+	"openFromLink": {
+		"message": "Open from a link"
+	},
 
-  "url_index.html": {
-    "message": "/index.html",
-    "description": "Tutorial of the extension."
-  }
+	"openFromSelection": {
+		"message": "Open from a selection"
+	},
+
+	"openingProtocolHttpFromAudio": {
+		"message": "Use http(Audio)",
+		"description": "Specify http(Audio)"
+	},
+
+	"openingProtocolHttpFromImage": {
+		"message": "Use http(Image)",
+		"description": "Specify http(Image)"
+	},
+
+	"openingProtocolHttpFromLink": {
+		"message": "Use http(Link)",
+		"description": "Specify http(Link)"
+	},
+
+	"openingProtocolHttpFromSelection": {
+		"message": "Use http(Selection)",
+		"description": "Specify http(Selection)"
+	},
+
+	"openingProtocolHttpFromVideo": {
+		"message": "Use http(Video)",
+		"description": "Specify http(Video)"
+	},
+
+	"openingProtocolHttpsFromAudio": {
+		"message": "Use https(Audio)",
+		"description": "Specify https(Audio)"
+	},
+
+	"openingProtocolHttpsFromImage": {
+		"message": "Use https(Image)",
+		"description": "Specify https(Image)"
+	},
+
+	"openingProtocolHttpsFromLink": {
+		"message": "Use https(Link)",
+		"description": "Specify https(Link)"
+	},
+
+	"openingProtocolHttpsFromSelection": {
+		"message": "Use https(Selection)",
+		"description": "Specify https(Selection)"
+	},
+
+	"openingProtocolHttpsFromVideo": {
+		"message": "Use https(Video)",
+		"description": "Specify https(Video)"
+	},
+
+	"openingProtocolViewSourceHttpFromLink": {
+		"message": "Use http(View source of the link)",
+		"description": "Use http(View source of the link)"
+	},
+
+	"openingProtocolViewSourceHttpFromSelection": {
+		"message": "Use http(View source of the selection)",
+		"description": "Specify http(View source of the selection)"
+	},
+
+	"openingProtocolViewSourceHttpsFromLink": {
+		"message": "Use https(View source of the link)",
+		"description": "Use https(View source of the link)"
+	},
+
+	"openingProtocolViewSourceHttpsFromSelection": {
+		"message": "Use https(View source of the selection)",
+		"description": "Specify https(View source of the selection)"
+	},
+
+	"optionsHTMLTitle": {
+		"message": "Options",
+		"description": "The title of options.html."
+	},
+
+	"protocol": {
+		"message": "Protocol"
+	},
+
+	"specify": {
+		"message": "Specify"
+	},
+
+	"sidebarHTMLTitle": {
+		"message": "Tutorial",
+		"description": "The title of sidebar.html."
+	},
+
+	"target": {
+		"message": "Target"
+	},
+
+	"thisUrlIsNotAValidUrl": {
+		"message": "This url is not a valid url."
+	},
+
+	"tutorial": {
+		"message": "Open a tutorial",
+		"description": "Open a link of a tutorial"
+	},
+
+	"tutorialTitle": {
+		"message": "Open in Sidebar - Tutorial",
+		"description": "The title of the tutorial."
+	},
+
+	"url_error.html": {
+		"message": "/error.html",
+		"description": "An error page."
+	},
+
+	"url_index.html": {
+		"message": "/index.html",
+		"description": "Tutorial of the extension."
+	},
+
+	"viewSourceFromLink": {
+		"message": "View source of a link"
+	},
+
+	"viewSourceFromSelection": {
+		"message": "View source of a selection"
+	},
+
+	"watchTheVideo": {
+		"message": "Watch the Video"
+	}
 }

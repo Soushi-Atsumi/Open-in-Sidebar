@@ -15,29 +15,26 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8" />
-	<title>Tutorial</title>
+	<link rel="stylesheet" type="text/css" href="index.css" />
+	<title></title>
 </head>
 <body>
-	<div style="text-align:center;font-size:64px;">
-		Open in Sidebar - Tutorial<br />
-		<img src="icons/icon-1536.png" alt="The icon of this extension" height="192" />
+	<div id="tutorialTitleDivision">
+		<label id="tutorialTitleLabel"></label><br />
+		<img id="icon" src="icons/icon-1536.png" height="192" />
 	</div>
-	<h1>1.Right click a link or right click selected characters, then choose "Open in Sidebar".</h1>
-	<img src="./images/image1.png" alt="Right click a link and choose Open in Sidebar" style="max-width:100%;" />
-	<img src="./images/image2.png" alt="Right click selected characters and choose Open in Sidebar" style="max-width:100%;" />
-	<h1>2.Choose the type what you want to open and open the link(choose https if you are not sure).</h1>
-	<img src="./images/image3.png" alt="Choose the type what you want to open and open the link(choose https if you are not sure) - In case of clicking a link" style="max-width:100%;" />
-	<img src="./images/image4.png" alt="Choose the type what you want to open and open the link(choose https if you are not sure) - In case of clicking selected characters" style="max-width:100%;" />
-	<div id="Others" style="color:white;background-color:black;padding-top:5px;padding-bottom:5px;background-clip:content-box;">
-		Ex: You can open audio, a image and a video in the sidebar.<br />
-		<img src="./images/image5.png" alt="Open a video in the sidebar" style="max-width:100%;" />
-	</div><br />
-	<div id="Caution" style="color:yellow;background-color:black;">
-		Caution: In case of selecting url which has https, https will be used even if you select http.
-	</div><br />
-	<footer style="text-align:center">
+	<h1 id="heading1"></h1>
+	<h1 id="heading2"></h1>
+
+	<label id="tutorialVideoDescriptionLabel"></label><br />
+	<a href="" id="tutorialVideoAnchor" target="_blank"></a>
+
+	<div id="othersDivision"></div><br />
+	<div id="cautionDivision"></div><br />
+	<footer>
 		&copy; 2018 Soushi Atsumi.<br />
 		Illustration: &copy; 2018 miya.
 	</footer>
+	<script src="index.js"></script>
 </body>
 </html>
