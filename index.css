@@ -1,0 +1,73 @@
+﻿/*
+ * Open in Sidebar - Very simple and useful extension. You can open a link in the sidebar.
+ * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * 
+ * This Source Code Form is "Incompatible With Secondary Licenses", as
+ * defined by the Mozilla Public License, v. 2.0.
+ */
+
+#tutorialTitleDivision {
+    font-size: 64px;
+    text-align: center;
+}
+
+#tutorialVideoDescriptionLabel {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#tutorialVideoDivision {
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.75);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+
+#closeTutorialVideoButton {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    z-index: 1;
+}
+
+#tutorialVideoIframe {
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.75);
+    border: none;
+    display: block;
+    height: 90%;
+    margin: 56px auto 10px auto;
+    width: 90%;
+}
+
+#othersDivision {
+	color: white;
+	background-color: black;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-clip: content-box;
+}
+
+#cautionDivision {
+    background-color: black;
+    color: yellow;
+}
+
+footer {
+    text-align: center;
+}

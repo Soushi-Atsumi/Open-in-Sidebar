@@ -12,10 +12,5 @@
 'use strict';
 
 document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
-document.title = browser.i18n.getMessage('sidebarHTMLTitle');
-
-browser.sidebarAction.getPanel({}).then((sidebarUrl) => {
-	if (sidebarUrl === browser.extension.getURL(`sidebar/sidebar.html`)) {
-		window.location = browser.extension.getURL("index.html");
-	}
-});
+document.title = browser.i18n.getMessage('errorHTMLTitle');
+document.getElementById('errorMessageHeading1').innerText = browser.i18n.getMessage('thisUrlIsNotAValidUrl');

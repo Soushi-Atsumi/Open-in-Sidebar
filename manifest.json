@@ -1,44 +1,57 @@
-{
-  "background": {
-    "scripts": [ "background/background.js" ]
-  },
+﻿{
+	"$schema": "http://json.schemastore.org/webextension",
 
-  "default_locale": "en",
+	"applications": {
+		"gecko": {
+			"strict_min_version": "60.0"
+		}
+	},
 
-  "description": "__MSG_extensionDescription__",
+	"background": {
+		"scripts": [ "background/background.js" ]
+	},
 
-  "developer": {
-    "name": "Soushi Atsumi",
-    "url": "https://pharaoh-development.blogspot.jp/"
-  },
+	"default_locale": "en",
 
-  "icons": {
-    "48": "icons/icon-48.png",
-    "96": "icons/icon-96.png",
-    "192": "icons/icon-192.png",
-    "384": "icons/icon-384.png",
-    "768": "icons/icon-768.png",
-    "1536": "icons/icon-1536.png"
-  },
+	"description": "__MSG_extensionDescription__",
 
-  "manifest_version": 2,
+	"developer": {
+		"name": "Soushi Atsumi",
+		"url": "https://pharaoh-development.blogspot.jp/"
+	},
 
-  "name": "__MSG_extensionName__",
+	"icons": {
+		"48": "icons/icon-48.png",
+		"96": "icons/icon-96.png",
+		"192": "icons/icon-192.png",
+		"384": "icons/icon-384.png",
+		"768": "icons/icon-768.png",
+		"1536": "icons/icon-1536.png"
+	},
 
-  "permissions": [ "contextMenus" ],
+	"manifest_version": 2,
 
-  "sidebar_action": {
-    "browser_style": true,
-    "default_icon": {
-      "48": "icons/icon-48.png",
-      "96": "icons/icon-96.png",
-      "192": "icons/icon-192.png",
-      "384": "icons/icon-384.png",
-      "768": "icons/icon-768.png",
-      "1536": "icons/icon-1536.png"
-    },
-    "default_panel": "sidebar/sidebar.html"
-  },
+	"name": "__MSG_extensionName__",
 
-  "version": "1.0"
+	"options_ui": {
+		"page": "options/options.html",
+		"browser_style": true
+	},
+
+	"permissions": [ "contextMenus", "storage" ],
+
+	"sidebar_action": {
+		"browser_style": true,
+		"default_icon": {
+			"48": "icons/icon-48.png",
+			"96": "icons/icon-96.png",
+			"192": "icons/icon-192.png",
+			"384": "icons/icon-384.png",
+			"768": "icons/icon-768.png",
+			"1536": "icons/icon-1536.png"
+		},
+		"default_panel": "sidebar/sidebar.html"
+	},
+
+	"version": "2.0"
 }
