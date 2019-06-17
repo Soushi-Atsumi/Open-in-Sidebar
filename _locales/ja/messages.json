@@ -61,6 +61,14 @@
 		"description": "使い方の動画のURL。"
 	},
 
+	"initialLocation": {
+		"message": "初期場所"
+	},
+
+	"initialLocationDescription": {
+		"message": "Enterを押すと保存します。空欄にすると初期状態に戻ります。"
+	},
+
 	"openFromLink": {
 		"message": "リンクから開く"
 	},
