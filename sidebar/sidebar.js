@@ -11,11 +11,20 @@
  */
 'use strict';
 
+var xmlHttpRequest = new XMLHttpRequest();
+xmlHttpRequest.open('GET', browser.extension.getURL('/_values/StorageKeys.json'), false);
+xmlHttpRequest.send();
+const storageKeys = JSON.parse(xmlHttpRequest.responseText);
+
 document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
 document.title = browser.i18n.getMessage('sidebarHTMLTitle');
 
 browser.sidebarAction.getPanel({}).then((sidebarUrl) => {
 	if (sidebarUrl === browser.extension.getURL(`sidebar/sidebar.html`)) {
-		window.location = browser.extension.getURL("index.html");
+		browser.storage.local.get(storageKeys.initialLocation).then((item) => {
+			window.location = browser.extension.getURL(item[storageKeys.initialLocation] || "index.html");
+		}).catch(() => {
+			window.location = browser.extension.getURL("index.html");
+		});
 	}
 });

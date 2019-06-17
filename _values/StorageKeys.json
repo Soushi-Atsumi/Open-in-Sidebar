@@ -1,6 +1,8 @@
 ﻿{
 	"ask": "Ask",
 
+	"initialLocation": "InitialLocation",
+
 	"link": "Link",
 
 	"protocol": "Protocol",

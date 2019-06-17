@@ -11,6 +11,18 @@
 		"scripts": [ "background/background.js" ]
 	},
 
+	"browser_action": {
+		"browser_style": true,
+		"default_icon": {
+			"48": "icons/icon-48.png",
+			"96": "icons/icon-96.png",
+			"192": "icons/icon-192.png",
+			"384": "icons/icon-384.png",
+			"768": "icons/icon-768.png",
+			"1536": "icons/icon-1536.png"
+		}
+	},
+
 	"default_locale": "en",
 
 	"description": "__MSG_extensionDescription__",
@@ -53,5 +65,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "2.0"
+	"version": "2.1"
 }

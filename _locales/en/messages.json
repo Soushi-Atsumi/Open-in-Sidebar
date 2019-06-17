@@ -61,6 +61,14 @@
 		"description": "The url of tutorial video."
 	},
 
+	"initialLocation": {
+		"message": "Initial Location"
+	},
+
+	"initialLocationDescription": {
+		"message": "Press Enter to save. It returns to the initial state by leaving it a blank."
+	},
+
 	"openFromLink": {
 		"message": "Open from a link"
 	},
@@ -173,16 +181,6 @@
 	"tutorialTitle": {
 		"message": "Open in Sidebar - Tutorial",
 		"description": "The title of the tutorial."
-	},
-
-	"url_error.html": {
-		"message": "/error.html",
-		"description": "An error page."
-	},
-
-	"url_index.html": {
-		"message": "/index.html",
-		"description": "Tutorial of the extension."
 	},
 
 	"viewSourceFromLink": {

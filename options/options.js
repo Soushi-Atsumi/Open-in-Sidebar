@@ -35,6 +35,8 @@ document.getElementById('openFromLinkLabel').innerText = browser.i18n.getMessage
 document.getElementById('openFromSelectionLabel').innerText = browser.i18n.getMessage('openFromSelection');
 document.getElementById('viewSourceFromLinkLabel').innerText = browser.i18n.getMessage('viewSourceFromLink');
 document.getElementById('viewSourceFromSelectionLabel').innerText = browser.i18n.getMessage('viewSourceFromSelection');
+document.getElementById('initialLocationLegend').innerText = browser.i18n.getMessage('initialLocation');
+document.getElementById('initialLocationLabel').innerText = browser.i18n.getMessage('initialLocationDescription');
 
 var protocolAskRadio = document.getElementById('protocol-ask');
 var protocolHttpRadio = document.getElementById('protocol-http');
@@ -61,9 +63,27 @@ for (let checkbox of checkboxes) {
 	checkbox.addEventListener('click', checkboxesOnClick);
 }
 
+var initialLocation = document.getElementById('initial-location');
+initialLocation.addEventListener('click', (event) => {
+	initialLocation.style.backgroundColor = '';
+});
+initialLocation.addEventListener('keydown', (event) => {
+	if (event.key === 'Enter') {
+		if (initialLocation.value === '') {
+			browser.storage.local.remove(storageKeys.initialLocation);
+		} else {
+			browser.storage.local.set({ [storageKeys.initialLocation]: initialLocation.value });
+		}
+		event.preventDefault();
+		initialLocation.blur();
+		initialLocation.style.backgroundColor = 'LightGreen';
+	}
+});
+
 checkProtocols();
 checkTargets();
 checkCheckboxes();
+checkInitialLocation();
 
 function protocolOnClick(event) {
 	switch (event.target.id) {
@@ -141,4 +161,10 @@ function toggleCheckboxsDisabled(disabled) {
 	for (let i = 0; i < checkboxes.length; i++) {
 		checkboxes[i].disabled = disabled;
 	}
+}
+
+function checkInitialLocation() {
+	browser.storage.local.get(storageKeys.initialLocation).then((item) => {
+		initialLocation.value = item[storageKeys.initialLocation] || '';
+	});
 }

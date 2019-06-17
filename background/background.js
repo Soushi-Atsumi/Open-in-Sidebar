@@ -121,6 +121,10 @@ browser.contextMenus.onShown.addListener(function (info, tab) {
 	});
 });
 
+browser.browserAction.onClicked.addListener((tab) => {
+	browser.sidebarAction.open();
+});
+
 function createContextMenus(protocol, target, settings) {
 	let linkIsEnabled = target === targetKeys.ask || settings[storageKeys.link] === undefined ? true : settings[storageKeys.link];
 	let selectionIsEnabled = target === targetKeys.ask || settings[storageKeys.selection] === undefined ? true : settings[storageKeys.selection];

@@ -15,6 +15,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="options.css" />
 	<title></title>
 </head>
 <body>
@@ -33,6 +34,11 @@
 			<input type="checkbox" class="checkbox" id="target-selection" checked disabled><label id="openFromSelectionLabel"></label><br />
 			<input type="checkbox" class="checkbox" id="target-view-source-link" checked disabled><label id="viewSourceFromLinkLabel"></label><br />
 			<input type="checkbox" class="checkbox" id="target-view-source-selection" checked disabled><label id="viewSourceFromSelectionLabel"></label>
+		</fieldset>
+		<fieldset>
+			<legend id="initialLocationLegend"></legend>
+			<label id="initialLocationLabel"></label><br />
+			<input type="text" id="initial-location" placeholder="https://www.example.com/">
 		</fieldset><br />
 	</form>
 	<script src="options.js"></script>
