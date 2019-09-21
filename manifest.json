@@ -50,7 +50,7 @@
 		"browser_style": true
 	},
 
-	"permissions": [ "contextMenus", "storage" ],
+	"permissions": [ "activeTab", "contextMenus", "storage" ],
 
 	"sidebar_action": {
 		"browser_style": true,
@@ -65,5 +65,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "2.1"
+	"version": "2.2"
 }

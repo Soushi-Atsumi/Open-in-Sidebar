@@ -152,6 +152,11 @@
 		"description": "options.htmlの題名。"
 	},
 
+	"openingPageInTheSiderbar": {
+		"message": "このページを開く",
+		"description": "タブかページをサイドバーで開く"
+	},
+
 	"protocol": {
 		"message": "プロトコル"
 	},

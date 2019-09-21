@@ -36,6 +36,7 @@ const httpSelectionId = 'http-selection';
 const httpVideoId = 'http-video';
 const viewSourceHttpLinkId = 'view-source-http-link';
 const viewSourceHttpSelectionId = 'view-source-http-selection';
+const openPageId = 'open-page';
 
 browser.contextMenus.onClicked.addListener((info, tab) => {
 	var url;
@@ -61,6 +62,8 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
 			case httpsVideoId:
 				url = new URL(info.srcUrl);
 				break;
+			case openPageId:
+				url = new URL(tab.url);
 		}
 
 		switch (info.menuItemId) {
@@ -122,6 +125,7 @@ browser.contextMenus.onShown.addListener(function (info, tab) {
 });
 
 browser.browserAction.onClicked.addListener((tab) => {
+	browser.sidebarAction.close();
 	browser.sidebarAction.open();
 });
 
@@ -233,6 +237,12 @@ function createContextMenus(protocol, target, settings) {
 				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromSelection')
 			});
 		}
+
+		browser.contextMenus.create({
+			contexts: ['page', 'tab'],
+			id: openPageId,
+			title: browser.i18n.getMessage('openingPageInTheSiderbar')
+		});
 	}
 
 	browser.contextMenus.refresh();

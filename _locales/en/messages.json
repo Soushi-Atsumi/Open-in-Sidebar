@@ -152,6 +152,11 @@
 		"description": "The title of options.html."
 	},
 
+	"openingPageInTheSiderbar": {
+		"message": "Open this page",
+		"description": "Oepn the tab or the page in the sidebar"
+	},
+
 	"protocol": {
 		"message": "Protocol"
 	},
