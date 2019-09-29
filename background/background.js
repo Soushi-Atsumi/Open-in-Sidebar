@@ -237,13 +237,13 @@ function createContextMenus(protocol, target, settings) {
 				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromSelection')
 			});
 		}
-
-		browser.contextMenus.create({
-			contexts: ['page', 'tab'],
-			id: openPageId,
-			title: browser.i18n.getMessage('openingPageInTheSiderbar')
-		});
 	}
+
+	browser.contextMenus.create({
+		contexts: ['page', 'tab'],
+		id: openPageId,
+		title: browser.i18n.getMessage('openingPageInTheSiderbar')
+	});
 
 	browser.contextMenus.refresh();
 }
