@@ -30,15 +30,23 @@
 			<legend id="targetLegend"></legend>
 			<input type="radio" id="target-ask" name="target" checked="checked"><label id="askTargetLabel"></label><br />
 			<input type="radio" id="target-specify" name="target"><label id="specifyTargetLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-bookmark" checked disabled><label id="openFromBookmarkLabel"></label><br />
 			<input type="checkbox" class="checkbox" id="target-link" checked disabled><label id="openFromLinkLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-page" checked disabled><label id="openFromPageLabel"></label><br />
 			<input type="checkbox" class="checkbox" id="target-selection" checked disabled><label id="openFromSelectionLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-view-source-bookmark" checked disabled><label id="viewSourceFromBookmarkLabel"></label><br />
 			<input type="checkbox" class="checkbox" id="target-view-source-link" checked disabled><label id="viewSourceFromLinkLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-view-source-page" checked disabled><label id="viewSourceFromPageLabel"></label><br />
 			<input type="checkbox" class="checkbox" id="target-view-source-selection" checked disabled><label id="viewSourceFromSelectionLabel"></label>
 		</fieldset>
 		<fieldset>
 			<legend id="initialLocationLegend"></legend>
 			<label id="initialLocationLabel"></label><br />
 			<input type="text" id="initial-location" placeholder="https://www.example.com/">
+		</fieldset><br />
+		<fieldset>
+			<legend id="additionalPermissionsLegend"></legend>
+			<input type="checkbox" id="additional-permissions-bookmarks"><label id="bookmarksLabel"></label>
 		</fieldset><br />
 	</form>
 	<script src="options.js"></script>

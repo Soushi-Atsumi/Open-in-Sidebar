@@ -1,11 +1,87 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A6A85B2D-AED7-43FC-AD6E-979E320D1380}"
+	ProjectSection(SolutionItems) = preProject
+		index.css = index.css
+		index.html = index.html
+		index.js = index.js
+		LICENSE.txt = LICENSE.txt
+		manifest.json = manifest.json
+		README.md = README.md
+		README_ja.md = README_ja.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_locales", "_locales", "{996A7278-5863-40A6-859F-CBF8875F589D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en", "en", "{B51DDB5B-23DF-41C9-8AFC-11892469878C}"
+	ProjectSection(SolutionItems) = preProject
+		_locales\en\messages.json = _locales\en\messages.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ja", "ja", "{E4A5068F-F7DD-4874-829E-C2289A71430C}"
+	ProjectSection(SolutionItems) = preProject
+		_locales\ja\messages.json = _locales\ja\messages.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_values", "_values", "{14ADA76A-61F7-4910-9598-5216885F2EB9}"
+	ProjectSection(SolutionItems) = preProject
+		_values\ProtocolKeys.json = _values\ProtocolKeys.json
+		_values\StorageKeys.json = _values\StorageKeys.json
+		_values\TargetKeys.json = _values\TargetKeys.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "background", "background", "{90D670D8-8BFD-40FC-93C9-67DD187640AF}"
+	ProjectSection(SolutionItems) = preProject
+		background\background.js = background\background.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "error", "error", "{7B7C5675-96A9-4A83-837C-2725E6D5401C}"
+	ProjectSection(SolutionItems) = preProject
+		error\error.html = error\error.html
+		error\error.js = error\error.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "icons", "icons", "{B795FD6F-C00E-4122-A6A9-3721AAC4DDA1}"
+	ProjectSection(SolutionItems) = preProject
+		icons\icon-1536.png = icons\icon-1536.png
+		icons\icon-192.png = icons\icon-192.png
+		icons\icon-24.png = icons\icon-24.png
+		icons\icon-384.png = icons\icon-384.png
+		icons\icon-48.png = icons\icon-48.png
+		icons\icon-768.png = icons\icon-768.png
+		icons\icon-96.png = icons\icon-96.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "options", "options", "{2E9A7F7E-91A8-4F00-9F84-C75AF4EAD645}"
+	ProjectSection(SolutionItems) = preProject
+		options\options.css = options\options.css
+		options\options.html = options\options.html
+		options\options.js = options\options.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sidebar", "sidebar", "{6B5C191A-6817-4BE1-BF9B-15B166AA2CFC}"
+	ProjectSection(SolutionItems) = preProject
+		sidebar\sidebar.html = sidebar\sidebar.html
+		sidebar\sidebar.js = sidebar\sidebar.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{996A7278-5863-40A6-859F-CBF8875F589D} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
+		{B51DDB5B-23DF-41C9-8AFC-11892469878C} = {996A7278-5863-40A6-859F-CBF8875F589D}
+		{E4A5068F-F7DD-4874-829E-C2289A71430C} = {996A7278-5863-40A6-859F-CBF8875F589D}
+		{14ADA76A-61F7-4910-9598-5216885F2EB9} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
+		{90D670D8-8BFD-40FC-93C9-67DD187640AF} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
+		{7B7C5675-96A9-4A83-837C-2725E6D5401C} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
+		{B795FD6F-C00E-4122-A6A9-3721AAC4DDA1} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
+		{2E9A7F7E-91A8-4F00-9F84-C75AF4EAD645} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
+		{6B5C191A-6817-4BE1-BF9B-15B166AA2CFC} = {A6A85B2D-AED7-43FC-AD6E-979E320D1380}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {789677AA-76D2-4DDA-B0B2-8C537ED1276D}

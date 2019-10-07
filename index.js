@@ -11,15 +11,23 @@
  */
 'use strict';
 
-document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
-document.title = browser.i18n.getMessage('indexHTMLTitle');
-document.getElementById('tutorialTitleLabel').innerText = browser.i18n.getMessage('tutorialTitle');
-document.getElementById('icon').alt = browser.i18n.getMessage('iconImageAlt');
-document.getElementById('heading1').innerText = browser.i18n.getMessage('indexHTMLHeading1');
-document.getElementById('heading2').innerText = browser.i18n.getMessage('indexHTMLHeading2');
+main();
 
-var tutorialVideoAnchor = document.getElementById('tutorialVideoAnchor');
-tutorialVideoAnchor.innerText = browser.i18n.getMessage('watchTheVideo');
-tutorialVideoAnchor.href = browser.i18n.getMessage('indexHTMLTutorialVideo');
-document.getElementById('othersDivision').innerText = browser.i18n.getMessage('indexHTMLOthers');
-document.getElementById('cautionDivision').innerText = browser.i18n.getMessage('indexHTMLCaution');
+function main() {
+	initDocuments();
+}
+
+function initDocuments() {
+	document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+	document.title = browser.i18n.getMessage('indexHTMLTitle');
+	document.getElementById('tutorialTitleLabel').innerText = browser.i18n.getMessage('tutorialTitle');
+	document.getElementById('icon').alt = browser.i18n.getMessage('iconImageAlt');
+	document.getElementById('heading1').innerText = browser.i18n.getMessage('indexHTMLHeading1');
+	document.getElementById('heading2').innerText = browser.i18n.getMessage('indexHTMLHeading2');
+
+	const tutorialVideoAnchor = document.getElementById('tutorialVideoAnchor');
+	tutorialVideoAnchor.innerText = browser.i18n.getMessage('watchTheVideo');
+	tutorialVideoAnchor.href = browser.i18n.getMessage('indexHTMLTutorialVideo');
+	document.getElementById('othersDivision').innerText = browser.i18n.getMessage('indexHTMLOthers');
+	document.getElementById('cautionDivision').innerText = browser.i18n.getMessage('indexHTMLCaution');
+}
