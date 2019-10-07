@@ -3,7 +3,11 @@
 
 	"initialLocation": "InitialLocation",
 
+	"bookmark": "Bookmark",
+
 	"link": "Link",
+
+	"page": "Page",
 
 	"protocol": "Protocol",
 
@@ -13,7 +17,11 @@
 
 	"target": "Target",
 
+	"viewSourceFromBookmark": "ViewSourceFromBookmark",
+
 	"viewSourceLink": "ViewSourceLink",
+
+	"viewSourcePage": "ViewSourcePage",
 
 	"viewSourceSelection": "ViewSourceSelection"
 }

@@ -3,7 +3,7 @@
 
 	"applications": {
 		"gecko": {
-			"strict_min_version": "60.0"
+			"strict_min_version": "57.0"
 		}
 	},
 
@@ -45,6 +45,8 @@
 
 	"name": "__MSG_extensionName__",
 
+	"optional_permissions": ["bookmarks"],
+
 	"options_ui": {
 		"page": "options/options.html",
 		"browser_style": true
@@ -65,5 +67,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "2.2.1"
+	"version": "3.0.2"
 }

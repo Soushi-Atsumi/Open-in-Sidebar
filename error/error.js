@@ -11,6 +11,14 @@
  */
 'use strict';
 
-document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
-document.title = browser.i18n.getMessage('errorHTMLTitle');
-document.getElementById('errorMessageHeading1').innerText = browser.i18n.getMessage('thisUrlIsNotAValidUrl');
+main();
+
+function main() {
+	initDocuments();
+}
+
+function initDocuments() {
+	document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+	document.title = browser.i18n.getMessage('errorHTMLTitle');
+	document.getElementById('errorMessageHeading1').innerText = browser.i18n.getMessage('thisUrlIsNotAValidUrl');
+}

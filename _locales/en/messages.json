@@ -1,4 +1,8 @@
 ﻿{
+	"additionalPermissions": {
+		"message": "Additional permissions"
+	},
+
 	"alwaysUsesHttp": {
 		"message": "Always use http"
 	},
@@ -9,6 +13,10 @@
 
 	"ask": {
 		"message": "Ask"
+	},
+
+	"bookmarks": {
+		"message": "bookmarks"
 	},
 
 	"errorHTMLTitle": {
@@ -47,7 +55,7 @@
 	},
 
 	"indexHTMLOthers": {
-		"message": "Ex: You can open audio, an image and a video in the sidebar.",
+		"message": "Ex: You can open audio, an image, a video, a bookmark and a tab in the sidebar.",
 		"description": "others of index.html"
 	},
 
@@ -69,92 +77,53 @@
 		"message": "Press Enter to save. It returns to the initial state by leaving it a blank."
 	},
 
+	"openFromBookmark": {
+		"message": "Open from a bookmark"
+	},
+
 	"openFromLink": {
 		"message": "Open from a link"
+	},
+
+	"openFromPage": {
+		"message": "Open from a page"
 	},
 
 	"openFromSelection": {
 		"message": "Open from a selection"
 	},
 
-	"openingProtocolHttpFromAudio": {
-		"message": "Use http(Audio)",
-		"description": "Specify http(Audio)"
+	"openThisAudio": {
+		"message": "Open this audio"
 	},
 
-	"openingProtocolHttpFromImage": {
-		"message": "Use http(Image)",
-		"description": "Specify http(Image)"
+	"openThisBookmark": {
+		"message": "Open this bookmark"
 	},
 
-	"openingProtocolHttpFromLink": {
-		"message": "Use http(Link)",
-		"description": "Specify http(Link)"
+	"openThisImage": {
+		"message": "Open this image"
 	},
 
-	"openingProtocolHttpFromSelection": {
-		"message": "Use http(Selection)",
-		"description": "Specify http(Selection)"
+	"openThisLink": {
+		"message": "Open this link"
 	},
 
-	"openingProtocolHttpFromVideo": {
-		"message": "Use http(Video)",
-		"description": "Specify http(Video)"
+	"openThisPage": {
+		"message": "Open this page"
 	},
 
-	"openingProtocolHttpsFromAudio": {
-		"message": "Use https(Audio)",
-		"description": "Specify https(Audio)"
+	"openThisSelection": {
+		"message": "Open this selection"
 	},
 
-	"openingProtocolHttpsFromImage": {
-		"message": "Use https(Image)",
-		"description": "Specify https(Image)"
-	},
-
-	"openingProtocolHttpsFromLink": {
-		"message": "Use https(Link)",
-		"description": "Specify https(Link)"
-	},
-
-	"openingProtocolHttpsFromSelection": {
-		"message": "Use https(Selection)",
-		"description": "Specify https(Selection)"
-	},
-
-	"openingProtocolHttpsFromVideo": {
-		"message": "Use https(Video)",
-		"description": "Specify https(Video)"
-	},
-
-	"openingProtocolViewSourceHttpFromLink": {
-		"message": "Use http(View source of the link)",
-		"description": "Use http(View source of the link)"
-	},
-
-	"openingProtocolViewSourceHttpFromSelection": {
-		"message": "Use http(View source of the selection)",
-		"description": "Specify http(View source of the selection)"
-	},
-
-	"openingProtocolViewSourceHttpsFromLink": {
-		"message": "Use https(View source of the link)",
-		"description": "Use https(View source of the link)"
-	},
-
-	"openingProtocolViewSourceHttpsFromSelection": {
-		"message": "Use https(View source of the selection)",
-		"description": "Specify https(View source of the selection)"
+	"openThisVideo": {
+		"message": "Open this video"
 	},
 
 	"optionsHTMLTitle": {
 		"message": "Options",
 		"description": "The title of options.html."
-	},
-
-	"openingPageInTheSiderbar": {
-		"message": "Open this page",
-		"description": "Oepn the tab or the page in the sidebar"
 	},
 
 	"protocol": {
@@ -188,8 +157,30 @@
 		"description": "The title of the tutorial."
 	},
 
+	"useHttp": {
+		"message": "Use http",
+		"description": "Specify http"
+	},
+
+	"useHttps": {
+		"message": "Use https",
+		"description": "Specify https"
+	},
+
+	"viewSource": {
+		"message": "View source"
+	},
+
+	"viewSourceFromBookmark": {
+		"message": "View source of a bookmark"
+	},
+
 	"viewSourceFromLink": {
 		"message": "View source of a link"
+	},
+
+	"viewSourceFromPage": {
+		"message": "View source of a page"
 	},
 
 	"viewSourceFromSelection": {
