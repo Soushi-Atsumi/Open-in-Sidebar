@@ -58,7 +58,7 @@ function addEventListeners() {
 			if (initialLocation.value === '') {
 				browser.storage.local.remove(storageKeys.initialLocation);
 			} else {
-				browser.storage.local.get({ [storageKeys.initialLocation]: initialLocation.value });
+				browser.storage.local.set({ [storageKeys.initialLocation]: initialLocation.value });
 			}
 			event.preventDefault();
 			initialLocation.blur();
