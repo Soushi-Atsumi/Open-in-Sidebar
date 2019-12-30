@@ -3,6 +3,10 @@
 		"message": "Additional permissions"
 	},
 
+	"all": {
+		"message": "All"
+	},
+
 	"alwaysUsesHttp": {
 		"message": "Always use http"
 	},
@@ -126,6 +130,34 @@
 		"description": "The title of options.html."
 	},
 
+	"placement": {
+		"message": "Placement"
+	},
+
+	"placementAllCaution": {
+		"message": "'All' cannot overwrite 'Tab' or 'Window'. 'All' can be overwritten by 'Tab' or 'Window'."
+	},
+
+	"placementAllDescription": {
+		"message": "Overwrite all sidebars."
+	},
+
+	"placementTabCaution": {
+		"message": "'Tab' cannot be overwritten by a sidebar which is not 'Tab'."
+	},
+
+	"placementTabDescription": {
+		"message": "Overwrite a sidebar at the current tab."
+	},
+
+	"placementWindowCaution": {
+		"message": "'Window' cannot overwrite 'Tab'. 'Window' can be overwritten by 'Tab' or 'Window'."
+	},
+
+	"placementWindowDescription": {
+		"message": "Overwrite sidebars at the current window."
+	},
+
 	"protocol": {
 		"message": "Protocol"
 	},
@@ -137,6 +169,10 @@
 	"sidebarHTMLTitle": {
 		"message": "Tutorial",
 		"description": "The title of sidebar.html."
+	},
+
+	"tab": {
+		"message": "Tab"
 	},
 
 	"target": {
@@ -189,5 +225,9 @@
 
 	"watchTheVideo": {
 		"message": "Watch the Video"
+	},
+
+	"window": {
+		"message": "Window"
 	}
 }

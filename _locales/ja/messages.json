@@ -3,6 +3,10 @@
 		"message": "追加の権限"
 	},
 
+	"all": {
+		"message": "全て"
+	},
+
 	"alwaysUsesHttp": {
 		"message": "常にhttpを使用する"
 	},
@@ -126,6 +130,34 @@
 		"description": "options.htmlの題名。"
 	},
 
+	"placement": {
+		"message": "配置"
+	},
+
+	"placementAllCaution": {
+		"message": "「全て」は「タブ」と「ウィンドウ」を上書きできません。「全て」を「タブ」と「ウィンドウ」で上書きすることはできます。"
+	},
+
+	"placementAllDescription": {
+		"message": "全てのサイドバーを上書きします。"
+	},
+
+	"placementTabCaution": {
+		"message": "「タブ」は「タブ」以外に上書きされません。"
+	},
+
+	"placementTabDescription": {
+		"message": "現在のタブに存在するサイドバーを上書きします。"
+	},
+
+	"placementWindowCaution": {
+		"message": "「ウィンドウ」は「タブ」を上書きできません。「ウィンドウ」を「タブ」と「ウィンドウ」で上書きすることはできます。"
+	},
+
+	"placementWindowDescription": {
+		"message": "現在のウィンドウに存在するサイドバーを上書きします。"
+	},
+
 	"protocol": {
 		"message": "プロトコル"
 	},
@@ -137,6 +169,10 @@
 	"sidebarHTMLTitle": {
 		"message": "使い方",
 		"description": "sidebar.htmlの題名。"
+	},
+
+	"tab": {
+		"message": "タブ"
 	},
 
 	"target": {
@@ -189,5 +225,9 @@
 
 	"watchTheVideo": {
 		"message": "動画を観る"
+	},
+
+	"window": {
+		"message": "ウィンドウ"
 	}
 }
