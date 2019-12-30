@@ -14,6 +14,7 @@
 var storageKeys;
 var targetKeys;
 var protocolKeys;
+var placementKeys;
 
 const checkboxes = document.getElementsByClassName('checkbox');
 const protocolAskRadio = document.getElementById('protocol-ask');
@@ -32,6 +33,9 @@ const targetViewSourcePageCheckbox = document.getElementById('target-view-source
 const targetViewSourceSelectionCheckbox = document.getElementById('target-view-source-selection');
 const initialLocation = document.getElementById('initial-location');
 const additionalPermissionsBookmarksCheckbox = document.getElementById('additional-permissions-bookmarks');
+const placementAllRadio = document.getElementById('placement-all');
+const placementTabRadio = document.getElementById('placement-tab');
+const placementWindowRadio = document.getElementById('placement-window');
 
 main();
 
@@ -44,6 +48,7 @@ function main() {
 	checkCheckboxes();
 	checkInitialLocation();
 	checkPermissions();
+	checkBehaviors();
 }
 
 function addEventListeners() {
@@ -66,6 +71,7 @@ function addEventListeners() {
 		}
 	});
 	additionalPermissionsBookmarksCheckbox.addEventListener('click', requestPermission);
+	document.options.placement.forEach((element) => element.addEventListener('click', placementOnClick));
 }
 
 function readKeys() {
@@ -79,6 +85,9 @@ function readKeys() {
 	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/ProtocolKeys.json'), false);
 	xmlHttpRequest.send();
 	protocolKeys = JSON.parse(xmlHttpRequest.responseText);
+	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/PlacementKeys.json'), false);
+	xmlHttpRequest.send();
+	placementKeys = JSON.parse(xmlHttpRequest.responseText);
 }
 
 function initDocuments() {
@@ -103,6 +112,16 @@ function initDocuments() {
 	document.getElementById('initialLocationLabel').innerText = browser.i18n.getMessage('initialLocationDescription');
 	document.getElementById('additionalPermissionsLegend').innerText = browser.i18n.getMessage('additionalPermissions');
 	document.getElementById('bookmarksLabel').innerText = browser.i18n.getMessage('bookmarks');
+	document.getElementById('placementLegend').innerText = browser.i18n.getMessage('placement');
+	document.getElementById('placementAllLabel').innerText = browser.i18n.getMessage('all');
+	document.getElementById('placementAllCautionLabel').innerText = browser.i18n.getMessage('placementAllCaution');
+	document.getElementById('placementAllDescriptionLabel').innerText = browser.i18n.getMessage('placementAllDescription');
+	document.getElementById('placementTabLabel').innerText = browser.i18n.getMessage('tab');
+	document.getElementById('placementTabCautionLabel').innerText = browser.i18n.getMessage('placementTabCaution');
+	document.getElementById('placementTabDescriptionLabel').innerText = browser.i18n.getMessage('placementTabDescription');
+	document.getElementById('placementWindowLabel').innerText = browser.i18n.getMessage('window');
+	document.getElementById('placementWindowCautionLabel').innerText = browser.i18n.getMessage('placementWindowCaution');
+	document.getElementById('placementWindowDescriptionLabel').innerText = browser.i18n.getMessage('placementWindowDescription');
 }
 
 function protocolOnClick(event) {
@@ -128,6 +147,20 @@ function targetOnClick(event) {
 		case 'target-specify':
 			saveConfig({ [storageKeys.target]: targetKeys.specify });
 			toggleCheckboxsDisabled(false);
+			break;
+	}
+}
+
+function placementOnClick(event) {
+	switch (event.target.id) {
+		case 'placement-all':
+			saveConfig({ [storageKeys.placement]: placementKeys.all });
+			break;
+		case 'placement-tab':
+			saveConfig({ [storageKeys.placement]: placementKeys.tab });
+			break;
+		case 'placement-window':
+			saveConfig({ [storageKeys.placement]: placementKeys.window });
 			break;
 	}
 }
@@ -200,6 +233,22 @@ function checkInitialLocation() {
 function checkPermissions() {
 	browser.permissions.getAll().then(result => {
 		additionalPermissionsBookmarksCheckbox.checked = result.permissions.includes('bookmarks');
+	});
+}
+
+function checkBehaviors() {
+	browser.storage.local.get(storageKeys.placement).then((item) => {
+		switch (item[storageKeys.placement]) {
+			case placementKeys.all:
+				placementAllRadio.checked = true;
+				break;
+			case placementKeys.tab:
+				placementTabRadio.checked = true;
+				break;
+			case placementKeys.window:
+				placementWindowRadio.checked = true;
+				break;
+		}
 	});
 }
 

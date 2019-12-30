@@ -14,6 +14,8 @@
 var storageKeys;
 var targetKeys;
 var protocolKeys;
+var placementKeys;
+var currentSettings;
 
 const tutorialId = 'tutorial';
 const httpsAudioId = 'https-audio';
@@ -50,14 +52,20 @@ function main() {
 	browser.contextMenus.onClicked.addListener(openInTheSidebar);
 	browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 		if (message.action === 'reflesh') {
-			browser.storage.local.get().then((item) => updateContextMenus(item));
+			browser.storage.local.get().then((item) => {
+				currentSettings = item;
+				return updateContextMenus();
+			});
 		}
 	});
-	browser.storage.local.get().then((item) => createContextMenus(item));
+	browser.storage.local.get().then((item) => {
+		currentSettings = item;
+		return createContextMenus();
+	});
 }
 
-async function createContextMenus(settings) {
-	const contextMenusObject = await createContextMenusObject(settings);
+async function createContextMenus() {
+	const contextMenusObject = await createContextMenusObject();
 
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
@@ -80,9 +88,9 @@ async function createContextMenus(settings) {
 	}
 }
 
-async function createContextMenusObject(settings) {
-	const protocol = settings[storageKeys.protocol] === undefined ? protocolKeys.ask : settings[storageKeys.protocol];
-	const target = settings[storageKeys.target] === undefined ? targetKeys.ask : settings[storageKeys.target];
+async function createContextMenusObject() {
+	const protocol = currentSettings[storageKeys.protocol] === undefined ? protocolKeys.ask : currentSettings[storageKeys.protocol];
+	const target = currentSettings[storageKeys.target] === undefined ? targetKeys.ask : currentSettings[storageKeys.target];
 
 	let hasBookmarkPermission = false;
 	await browser.permissions.getAll().then(result => {
@@ -91,14 +99,14 @@ async function createContextMenusObject(settings) {
 		}
 	});
 
-	const bookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || settings[storageKeys.bookmark] === undefined ? true : settings[storageKeys.bookmark]);
-	const linkIsEnabled = target === targetKeys.ask || settings[storageKeys.link] === undefined ? true : settings[storageKeys.link];
-	const pageIsEnabled = target === targetKeys.ask || settings[storageKeys.page] === undefined ? true : settings[storageKeys.page];
-	const selectionIsEnabled = target === targetKeys.ask || settings[storageKeys.selection] === undefined ? true : settings[storageKeys.selection];
-	const viewSourceBookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || settings[storageKeys.viewSourceBookmark] === undefined ? true : settings[storageKeys.viewSourceBookmark]);
-	const viewSourceLinkIsEnabled = target === targetKeys.ask || settings[storageKeys.viewSourceLink] === undefined ? true : settings[storageKeys.viewSourceLink];
-	const viewSourcePageIsEnabled = target === targetKeys.ask || settings[storageKeys.viewSourcePage] === undefined ? true : settings[storageKeys.viewSourcePage];
-	const viewSourceSelectionIsEnabled = target === targetKeys.ask || settings[storageKeys.viewSourceSelection] === undefined ? true : settings[storageKeys.viewSourceSelection];
+	const bookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.bookmark] === undefined ? true : currentSettings[storageKeys.bookmark]);
+	const linkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
+	const pageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
+	const selectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
+	const viewSourceBookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.viewSourceBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceBookmark]);
+	const viewSourceLinkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
+	const viewSourcePageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
+	const viewSourceSelectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
 
 	const contextMenusObject = {
 		http: {},
@@ -373,9 +381,17 @@ async function openInTheSidebar(info, tab) {
 		}
 	}
 
-	browser.sidebarAction.setPanel({
+	let setPanelParameters = {
 		panel: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href
-	});
+	};
+
+	if (currentSettings[storageKeys.placement] === placementKeys.tab) {
+		setPanelParameters.tabId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].id;
+	} else if (currentSettings[storageKeys.placement] === placementKeys.window) {
+		setPanelParameters.windowId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].windowId;
+	}
+
+	browser.sidebarAction.setPanel(setPanelParameters);
 }
 
 function readKeys() {
@@ -389,10 +405,13 @@ function readKeys() {
 	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/ProtocolKeys.json'), false);
 	xmlHttpRequest.send();
 	protocolKeys = JSON.parse(xmlHttpRequest.responseText);
+	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/PlacementKeys.json'), false);
+	xmlHttpRequest.send();
+	placementKeys = JSON.parse(xmlHttpRequest.responseText);
 }
 
-async function updateContextMenus(settings) {
-	const contextMenusObject = await createContextMenusObject(settings);
+async function updateContextMenus() {
+	const contextMenusObject = await createContextMenusObject();
 
 	for (let i in contextMenusObject) {
 		for (let j in contextMenusObject[i]) {
