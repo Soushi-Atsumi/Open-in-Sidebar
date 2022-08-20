@@ -97,6 +97,10 @@
 		"message": "Open from a selection"
 	},
 
+	"openOptions": {
+		"message": "Open options"
+	},
+
 	"openThisAudio": {
 		"message": "Open this audio"
 	},
@@ -123,6 +127,10 @@
 
 	"openThisVideo": {
 		"message": "Open this video"
+	},
+
+	"openTutorial": {
+		"message": "Open a tutorial"
 	},
 
 	"optionsHTMLTitle": {
@@ -181,11 +189,6 @@
 
 	"thisUrlIsNotAValidUrl": {
 		"message": "This url is not a valid url."
-	},
-
-	"tutorial": {
-		"message": "Open a tutorial",
-		"description": "Open a link of a tutorial"
 	},
 
 	"tutorialTitle": {

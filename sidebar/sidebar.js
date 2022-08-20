@@ -11,26 +11,11 @@
  */
 'use strict';
 
-var storageKeys;
-
 main();
 
 function main() {
-	readKeys();
 	initDocuments();
-	addEventListeners();
-}
-
-function addEventListeners() {
-	browser.sidebarAction.getPanel({}).then((sidebarUrl) => {
-		if (sidebarUrl === browser.runtime.getURL(`sidebar/sidebar.html`)) {
-			browser.storage.local.get(storageKeys.initialLocation).then((item) => {
-				window.location = browser.runtime.getURL(item[storageKeys.initialLocation] || 'index.html');
-			}).catch(() => {
-				window.location = browser.runtime.getURL('index.html');
-			});
-		}
-	});
+	setLocation();
 }
 
 function initDocuments() {
@@ -38,9 +23,7 @@ function initDocuments() {
 	document.title = browser.i18n.getMessage('sidebarHTMLTitle');
 }
 
-function readKeys() {
-	const xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/StorageKeys.json'), false);
-	xmlHttpRequest.send();
-	storageKeys = JSON.parse(xmlHttpRequest.responseText);
+async function setLocation() {
+	const storageKeys = JSON.parse(await (await fetch('/_values/StorageKeys.json')).text());
+	window.location = (await browser.storage.local.get(storageKeys.initialLocation))[storageKeys.initialLocation] ?? '/index.html';
 }

@@ -10,15 +10,19 @@
  * defined by the Mozilla Public License, v. 2.0.
  */
 
+body {
+	padding: 8px;
+}
+
 #tutorialTitleDivision {
-    font-size: 64px;
-    text-align: center;
+	font-size: 64px;
+	text-align: center;
 }
 
 #tutorialVideoDescriptionLabel {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
+	color: blue;
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 #othersDivision {
@@ -30,10 +34,10 @@
 }
 
 #cautionDivision {
-    background-color: black;
-    color: yellow;
+	background-color: black;
+	color: yellow;
 }
 
 footer {
-    text-align: center;
+	text-align: center;
 }

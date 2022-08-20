@@ -97,6 +97,10 @@
 		"message": "選択文字から開く"
 	},
 
+	"openOptions": {
+		"message": "設定を開く"
+	},
+
 	"openThisAudio": {
 		"message": "この音声を開く"
 	},
@@ -123,6 +127,10 @@
 
 	"openThisVideo": {
 		"message": "この動画を開く"
+	},
+
+	"openTutorial": {
+		"message": "使い方を開く"
 	},
 
 	"optionsHTMLTitle": {
@@ -181,11 +189,6 @@
 
 	"thisUrlIsNotAValidUrl": {
 		"message": "このurlは無効なurlです。"
-	},
-
-	"tutorial": {
-		"message": "使い方を開く",
-		"description": "拡張機能の使い方へのリンクを開く"
 	},
 
 	"tutorialTitle": {
