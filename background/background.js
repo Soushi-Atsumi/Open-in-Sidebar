@@ -11,12 +11,13 @@
  */
 'use strict';
 
+var placementKeys;
+var protocolKeys;
 var storageKeys;
 var targetKeys;
-var protocolKeys;
-var placementKeys;
 var currentSettings;
 
+const optionsId = 'options';
 const tutorialId = 'tutorial';
 const httpsAudioId = 'https-audio';
 const httpsBookmarkId = 'https-Bookmark';
@@ -43,15 +44,17 @@ const viewSourceHttpSelectionId = 'view-source-http-selection';
 
 main();
 
-function main() {
-	readKeys();
+async function main() {
+	await readKeys();
 	browser.browserAction.onClicked.addListener((tab) => {
 		browser.sidebarAction.close();
 		browser.sidebarAction.open();
 	});
 	browser.contextMenus.onClicked.addListener(openInTheSidebar);
+	browser.permissions.onAdded.addListener(updateContextMenus);
+	browser.permissions.onRemoved.addListener(updateContextMenus);
 	browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-		if (message.action === 'reflesh') {
+		if (message.action === 'refresh') {
 			browser.storage.local.get().then((item) => {
 				currentSettings = item;
 				return updateContextMenus();
@@ -66,19 +69,20 @@ function main() {
 
 async function createContextMenus() {
 	const contextMenusObject = await createContextMenusObject();
+	const manifest = JSON.parse(await (await fetch("manifest.json")).text());
 
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
-		icons: {
-			"48": "icons/icon-48.png",
-			"96": "icons/icon-96.png",
-			"192": "icons/icon-192.png",
-			"384": "icons/icon-384.png",
-			"768": "icons/icon-768.png",
-			"1536": "icons/icon-1536.png"
-		},
+		icons: manifest.icons,
 		id: tutorialId,
-		title: browser.i18n.getMessage('tutorial')
+		title: browser.i18n.getMessage('openTutorial')
+	});
+
+	browser.contextMenus.create({
+		contexts: ['browser_action'],
+		icons: manifest.icons,
+		id: optionsId,
+		title: browser.i18n.getMessage('openOptions')
 	});
 
 	for (let i in contextMenusObject) {
@@ -103,7 +107,7 @@ async function createContextMenusObject() {
 	const linkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
 	const pageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
 	const selectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
-	const viewSourceBookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.viewSourceBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceBookmark]);
+	const viewSourceFromBookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.viewSourceFromBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceFromBookmark]);
 	const viewSourceLinkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
 	const viewSourcePageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
 	const viewSourceSelectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
@@ -169,11 +173,11 @@ async function createContextMenusObject() {
 		visible: protocol !== protocolKeys.https
 	};
 
-	contextMenusObject.http.viewSourceBookmark = {
+	contextMenusObject.http.viewSourceFromBookmark = {
 		contexts: ['bookmark'],
 		id: viewSourceHttpBookmarkId,
 		title: `${browser.i18n.getMessage('openThisBookmark')}${viewSourceHttpMessage}`,
-		visible: protocol !== protocolKeys.https && viewSourceBookmarkIsEnabled
+		visible: protocol !== protocolKeys.https && viewSourceFromBookmarkIsEnabled
 	};
 
 	contextMenusObject.http.viewSourceLink = {
@@ -247,11 +251,11 @@ async function createContextMenusObject() {
 		visible: protocol !== protocolKeys.http
 	};
 
-	contextMenusObject.https.viewSourceBookmark = {
+	contextMenusObject.https.viewSourceFromBookmark = {
 		contexts: ['bookmark'],
 		id: viewSourceHttpsBookmarkId,
 		title: `${browser.i18n.getMessage('openThisBookmark')}${viewSourceHttpsMessage}`,
-		visible: protocol !== protocolKeys.http && viewSourceBookmarkIsEnabled
+		visible: protocol !== protocolKeys.http && viewSourceFromBookmarkIsEnabled
 	};
 
 	contextMenusObject.https.viewSourceLink = {
@@ -280,12 +284,16 @@ async function createContextMenusObject() {
 
 async function openInTheSidebar(info, tab) {
 	let url;
+
 	try {
 		browser.sidebarAction.open();
 
 		switch (info.menuItemId) {
 			case tutorialId:
 				url = new URL(browser.runtime.getURL('/index.html'));
+				break;
+			case optionsId:
+				url = new URL((await browser.management.getSelf()).optionsUrl);
 				break;
 			case httpLinkId:
 			case httpsLinkId:
@@ -321,7 +329,7 @@ async function openInTheSidebar(info, tab) {
 					if (bookmarks[0].type === browser.bookmarks.BookmarkTreeNodeType.BOOKMARK) {
 						url = new URL(bookmarks[0].url);
 					} else {
-						url = new URL(browser.runtime.getURL('error/error.html'));
+						throw `${bookmarks[0].url} is not a bookmark of a page.`;
 					}
 				});
 				break;
@@ -341,10 +349,9 @@ async function openInTheSidebar(info, tab) {
 			case viewSourceHttpsLinkId:
 			case viewSourceHttpsPageId:
 			case viewSourceHttpsSelectionId:
+				url.href = url.href.replace(/^view-source:/, '');
 				url.protocol = 'https';
-				if (!url.href.startsWith('view-source:')) {
-					url.href = `view-source:${url.href}`;
-				}
+				url.href = `view-source:${url.href}`;
 				break;
 			case viewSourceHttpBookmarkId:
 			case viewSourceHttpLinkId:
@@ -394,20 +401,16 @@ async function openInTheSidebar(info, tab) {
 	browser.sidebarAction.setPanel(setPanelParameters);
 }
 
-function readKeys() {
-	const xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/StorageKeys.json'), false);
-	xmlHttpRequest.send();
-	storageKeys = JSON.parse(xmlHttpRequest.responseText);
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/TargetKeys.json'), false);
-	xmlHttpRequest.send();
-	targetKeys = JSON.parse(xmlHttpRequest.responseText);
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/ProtocolKeys.json'), false);
-	xmlHttpRequest.send();
-	protocolKeys = JSON.parse(xmlHttpRequest.responseText);
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/PlacementKeys.json'), false);
-	xmlHttpRequest.send();
-	placementKeys = JSON.parse(xmlHttpRequest.responseText);
+async function readKeys() {
+	const keyFiles = ['PlacementKeys.json', 'ProtocolKeys.json', 'StorageKeys.json', 'TargetKeys.json'].map(keyFile => `/_values/${keyFile}`);
+	return Promise.all(keyFiles.map(keyFile => fetch((keyFile)))).then(values => {
+		return Promise.all(values.map(value => value.text()));
+	}).then(values => {
+		placementKeys = JSON.parse(values[0]);
+		protocolKeys = JSON.parse(values[1]);
+		storageKeys = JSON.parse(values[2]);
+		targetKeys = JSON.parse(values[3]);
+	});
 }
 
 async function updateContextMenus() {

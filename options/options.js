@@ -27,7 +27,7 @@ const targetBookmarkCheckbox = document.getElementById('target-bookmark');
 const targetLinkCheckbox = document.getElementById('target-link');
 const targetPageCheckbox = document.getElementById('target-page');
 const targetSelectionCheckbox = document.getElementById('target-selection');
-const targetViewSourceBookmarkCheckbox = document.getElementById('target-view-source-bookmark');
+const targetViewSourceFromBookmarkCheckbox = document.getElementById('target-view-source-from-bookmark');
 const targetViewSourceLinkCheckbox = document.getElementById('target-view-source-link');
 const targetViewSourcePageCheckbox = document.getElementById('target-view-source-page');
 const targetViewSourceSelectionCheckbox = document.getElementById('target-view-source-selection');
@@ -39,10 +39,12 @@ const placementWindowRadio = document.getElementById('placement-window');
 
 main();
 
-function main() {
-	readKeys();
+async function main() {
+	await readKeys();
 	initDocuments();
 	addEventListeners();
+	browser.permissions.onAdded.addListener(checkPermissions);
+	browser.permissions.onRemoved.addListener(checkPermissions);
 	checkProtocols();
 	checkTargets();
 	checkCheckboxes();
@@ -74,20 +76,83 @@ function addEventListeners() {
 	document.options.placement.forEach((element) => element.addEventListener('click', placementOnClick));
 }
 
-function readKeys() {
-	const xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/StorageKeys.json'), false);
-	xmlHttpRequest.send();
-	storageKeys = JSON.parse(xmlHttpRequest.responseText);
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/TargetKeys.json'), false);
-	xmlHttpRequest.send();
-	targetKeys = JSON.parse(xmlHttpRequest.responseText);
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/ProtocolKeys.json'), false);
-	xmlHttpRequest.send();
-	protocolKeys = JSON.parse(xmlHttpRequest.responseText);
-	xmlHttpRequest.open('GET', browser.runtime.getURL('/_values/PlacementKeys.json'), false);
-	xmlHttpRequest.send();
-	placementKeys = JSON.parse(xmlHttpRequest.responseText);
+function checkBehaviors() {
+	browser.storage.local.get(storageKeys.placement).then((item) => {
+		switch (item[storageKeys.placement]) {
+			case placementKeys.all:
+				placementAllRadio.checked = true;
+				break;
+			case placementKeys.tab:
+				placementTabRadio.checked = true;
+				break;
+			case placementKeys.window:
+				placementWindowRadio.checked = true;
+				break;
+		}
+	});
+}
+
+function checkboxesOnClick(event) {
+	saveConfig({
+		[storageKeys.bookmark]: targetBookmarkCheckbox.checked,
+		[storageKeys.link]: targetLinkCheckbox.checked,
+		[storageKeys.page]: targetPageCheckbox.checked,
+		[storageKeys.selection]: targetSelectionCheckbox.checked,
+		[storageKeys.viewSourceFromBookmark]: targetViewSourceFromBookmarkCheckbox.checked,
+		[storageKeys.viewSourceLink]: targetViewSourceLinkCheckbox.checked,
+		[storageKeys.viewSourcePage]: targetViewSourcePageCheckbox.checked,
+		[storageKeys.viewSourceSelection]: targetViewSourceSelectionCheckbox.checked
+	});
+}
+
+function checkCheckboxes() {
+	browser.storage.local.get([storageKeys.link, storageKeys.selection, storageKeys.viewSourceLink, storageKeys.viewSourceSelection]).then((item) => {
+		targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
+		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.selection];
+		targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
+		targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
+		targetViewSourceFromBookmarkCheckbox.checked = item[storageKeys.viewSourceFromBookmark] === undefined ? true : item[storageKeys.viewSourceFromBookmark];
+		targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
+		targetViewSourcePageCheckbox.checked = item[storageKeys.viewSourcePage] === undefined ? true : item[storageKeys.viewSourcePage];
+		targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
+	});
+}
+
+function checkInitialLocation() {
+	browser.storage.local.get(storageKeys.initialLocation).then((item) => {
+		initialLocation.value = item[storageKeys.initialLocation] || '';
+	});
+}
+
+function checkPermissions() {
+	browser.permissions.getAll().then(permissions => additionalPermissionsBookmarksCheckbox.checked = permissions.permissions.includes('bookmarks'));
+}
+
+function checkProtocols() {
+	browser.storage.local.get([storageKeys.protocol]).then((item) => {
+		switch (item[storageKeys.protocol]) {
+			case protocolKeys.http:
+				protocolHttpRadio.checked = true;
+				break;
+			case protocolKeys.https:
+				protocolHttpsRadio.checked = true;
+				break;
+		}
+	});
+}
+
+function checkTargets() {
+	browser.storage.local.get(storageKeys.target).then((item) => {
+		switch (item[storageKeys.target]) {
+			case targetKeys.ask:
+				targetAskRadio.checked = true;
+				break;
+			case targetKeys.specify:
+				targetSpecifyRadio.checked = true;
+				toggleCheckboxsDisabled(false);
+				break;
+		}
+	});
 }
 
 function initDocuments() {
@@ -124,31 +189,8 @@ function initDocuments() {
 	document.getElementById('placementWindowDescriptionLabel').innerText = browser.i18n.getMessage('placementWindowDescription');
 }
 
-function protocolOnClick(event) {
-	switch (event.target.id) {
-		case 'protocol-ask':
-			saveConfig({ [storageKeys.protocol]: protocolKeys.ask });
-			break;
-		case 'protocol-http':
-			saveConfig({ [storageKeys.protocol]: protocolKeys.http });
-			break;
-		case 'protocol-https':
-			saveConfig({ [storageKeys.protocol]: protocolKeys.https });
-			break;
-	}
-}
-
-function targetOnClick(event) {
-	switch (event.target.id) {
-		case 'target-ask':
-			saveConfig({ [storageKeys.target]: targetKeys.ask });
-			toggleCheckboxsDisabled(true);
-			break;
-		case 'target-specify':
-			saveConfig({ [storageKeys.target]: targetKeys.specify });
-			toggleCheckboxsDisabled(false);
-			break;
-	}
+function notifyRefreshing() {
+	browser.runtime.sendMessage({ action: 'refresh' });
 }
 
 function placementOnClick(event) {
@@ -165,99 +207,30 @@ function placementOnClick(event) {
 	}
 }
 
-function checkboxesOnClick(event) {
-	saveConfig({
-		[storageKeys.bookmark]: targetBookmarkCheckbox.checked,
-		[storageKeys.link]: targetLinkCheckbox.checked,
-		[storageKeys.page]: targetPageCheckbox.checked,
-		[storageKeys.selection]: targetSelectionCheckbox.checked,
-		[storageKeys.viewSourceBookmark]: targetViewSourceBookmarkCheckbox.checked,
-		[storageKeys.viewSourceLink]: targetViewSourceLinkCheckbox.checked,
-		[storageKeys.viewSourcePage]: targetViewSourcePageCheckbox.checked,
-		[storageKeys.viewSourceSelection]: targetViewSourceSelectionCheckbox.checked
-	});
-}
-
-function checkProtocols() {
-	browser.storage.local.get([storageKeys.protocol]).then((item) => {
-		switch (item[storageKeys.protocol]) {
-			case protocolKeys.http:
-				protocolHttpRadio.checked = true;
-				break;
-			case protocolKeys.https:
-				protocolHttpsRadio.checked = true;
-				break;
-		}
-	});
-}
-
-function checkTargets() {
-	browser.storage.local.get(storageKeys.target).then((item) => {
-		switch (item[storageKeys.target]) {
-			case targetKeys.ask:
-				targetAskRadio.checked = true;
-				break;
-			case targetKeys.specify:
-				targetSpecifyRadio.checked = true;
-				toggleCheckboxsDisabled(false);
-				break;
-		}
-	});
-}
-
-function checkCheckboxes() {
-	browser.storage.local.get([storageKeys.link, storageKeys.selection, storageKeys.viewSourceLink, storageKeys.viewSourceSelection]).then((item) => {
-		targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
-		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.selection];
-		targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
-		targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
-		targetViewSourceBookmarkCheckbox.checked = item[storageKeys.viewSourceBookmark] === undefined ? true : item[storageKeys.viewSourceBookmark];
-		targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
-		targetViewSourcePageCheckbox.checked = item[storageKeys.viewSourcePage] === undefined ? true : item[storageKeys.viewSourcePage];
-		targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
-	});
-}
-
-function toggleCheckboxsDisabled(disabled) {
-	for (let i = 0; i < checkboxes.length; i++) {
-		checkboxes[i].disabled = disabled;
+function protocolOnClick(event) {
+	switch (event.target.id) {
+		case 'protocol-ask':
+			saveConfig({ [storageKeys.protocol]: protocolKeys.ask });
+			break;
+		case 'protocol-http':
+			saveConfig({ [storageKeys.protocol]: protocolKeys.http });
+			break;
+		case 'protocol-https':
+			saveConfig({ [storageKeys.protocol]: protocolKeys.https });
+			break;
 	}
 }
 
-function checkInitialLocation() {
-	browser.storage.local.get(storageKeys.initialLocation).then((item) => {
-		initialLocation.value = item[storageKeys.initialLocation] || '';
+async function readKeys() {
+	const keyFiles = ['PlacementKeys.json', 'ProtocolKeys.json', 'StorageKeys.json', 'TargetKeys.json'].map(keyFile => `/_values/${keyFile}`);
+	return Promise.all(keyFiles.map(keyFile => fetch((keyFile)))).then(values => {
+		return Promise.all(values.map(value => value.text()));
+	}).then(values => {
+		placementKeys = JSON.parse(values[0]);
+		protocolKeys = JSON.parse(values[1]);
+		storageKeys = JSON.parse(values[2]);
+		targetKeys = JSON.parse(values[3]);
 	});
-}
-
-function checkPermissions() {
-	browser.permissions.getAll().then(result => {
-		additionalPermissionsBookmarksCheckbox.checked = result.permissions.includes('bookmarks');
-	});
-}
-
-function checkBehaviors() {
-	browser.storage.local.get(storageKeys.placement).then((item) => {
-		switch (item[storageKeys.placement]) {
-			case placementKeys.all:
-				placementAllRadio.checked = true;
-				break;
-			case placementKeys.tab:
-				placementTabRadio.checked = true;
-				break;
-			case placementKeys.window:
-				placementWindowRadio.checked = true;
-				break;
-		}
-	});
-}
-
-function saveConfig(keys) {
-	browser.storage.local.set(keys).then(notifyRefleshing());
-}
-
-function notifyRefleshing() {
-	browser.runtime.sendMessage({ action: 'reflesh' });
 }
 
 function requestPermission(event) {
@@ -266,11 +239,32 @@ function requestPermission(event) {
 		if (additionalPermissionsBookmarksCheckbox.checked) {
 			browser.permissions.request(bookmarkPermission).then((accepted) => {
 				additionalPermissionsBookmarksCheckbox.checked = accepted;
-				notifyRefleshing();
 			});
 		} else {
 			browser.permissions.remove(bookmarkPermission);
-			notifyRefleshing();
 		}
 	}
+}
+
+function targetOnClick(event) {
+	switch (event.target.id) {
+		case 'target-ask':
+			saveConfig({ [storageKeys.target]: targetKeys.ask });
+			toggleCheckboxsDisabled(true);
+			break;
+		case 'target-specify':
+			saveConfig({ [storageKeys.target]: targetKeys.specify });
+			toggleCheckboxsDisabled(false);
+			break;
+	}
+}
+
+function toggleCheckboxsDisabled(disabled) {
+	for (let i = 0; i < checkboxes.length; i++) {
+		checkboxes[i].disabled = disabled;
+	}
+}
+
+function saveConfig(keys) {
+	browser.storage.local.set(keys).then(notifyRefreshing());
 }

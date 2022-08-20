@@ -10,6 +10,10 @@
  * defined by the Mozilla Public License, v. 2.0.
  */
 
+body {
+	padding: 8px;
+}
+
 #initial-location {
 	border-width: 0px;
 	width: 100%;
