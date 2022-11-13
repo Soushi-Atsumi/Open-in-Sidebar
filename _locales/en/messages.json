@@ -23,6 +23,10 @@
 		"message": "bookmarks"
 	},
 
+	"default": {
+		"message": "Default"
+	},
+
 	"errorHTMLTitle": {
 		"message": "Error",
 		"description": "The title of error.html."
@@ -36,6 +40,10 @@
 	"extensionName": {
 		"message": "Open in Sidebar",
 		"description": "Name of the extension."
+	},
+
+	"host": {
+		"message": "host"
 	},
 
 	"iconImageAlt": {
@@ -138,6 +146,14 @@
 		"description": "The title of options.html."
 	},
 
+	"optionsUserAgentHTMLInformation": {
+		"message": "This feature requires the host permission."
+	},
+
+	"optionsUserAgentHTMLCaution": {
+		"message": "This overwrites the user agent and it effects a page of all extensions."
+	},
+
 	"placement": {
 		"message": "Placement"
 	},
@@ -204,6 +220,10 @@
 	"useHttps": {
 		"message": "Use https",
 		"description": "Specify https"
+	},
+
+	"userAgent": {
+		"message": "User agent"
 	},
 
 	"viewSource": {

@@ -23,6 +23,10 @@
 		"message": "ブックマーク"
 	},
 
+	"default": {
+		"message": "既定値"
+	},
+
 	"errorHTMLTitle": {
 		"message": "エラー",
 		"description": "error.htmlの題名。"
@@ -36,6 +40,10 @@
 	"extensionName": {
 		"message": "サイドバーで開く",
 		"description": "拡張機能名。"
+	},
+
+	"host": {
+		"message": "ホスト"
 	},
 
 	"iconImageAlt": {
@@ -138,6 +146,14 @@
 		"description": "options.htmlの題名。"
 	},
 
+	"optionsUserAgentHTMLInformation": {
+		"message": "この機能はホスト権限を必要とします。"
+	},
+
+	"optionsUserAgentHTMLCaution": {
+		"message": "これはユーザーエージェントを上書きし、全ての拡張機能のページに影響します。"
+	},
+
 	"placement": {
 		"message": "配置"
 	},
@@ -204,6 +220,10 @@
 	"useHttps": {
 		"message": "httpsを使用する",
 		"description": "httpsの指定"
+	},
+
+	"userAgent": {
+		"message": "ユーザーエージェント"
 	},
 
 	"viewSource": {

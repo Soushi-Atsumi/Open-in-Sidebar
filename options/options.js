@@ -11,16 +11,18 @@
  */
 'use strict';
 
-var storageKeys;
-var targetKeys;
-var protocolKeys;
-var placementKeys;
+let placements;
+let protocols;
+let storageKeys;
+let targets;
+let userAgents;
 
-const checkboxes = document.getElementsByClassName('checkbox');
+const bookmarksPermissions = { permissions: ['bookmarks'] };
+const hostPermissions = { origins: ['*://*/*'] };
+
 const protocolAskRadio = document.getElementById('protocol-ask');
 const protocolHttpRadio = document.getElementById('protocol-http');
 const protocolHttpsRadio = document.getElementById('protocol-https');
-
 const targetAskRadio = document.getElementById('target-ask');
 const targetSpecifyRadio = document.getElementById('target-specify');
 const targetBookmarkCheckbox = document.getElementById('target-bookmark');
@@ -33,6 +35,11 @@ const targetViewSourcePageCheckbox = document.getElementById('target-view-source
 const targetViewSourceSelectionCheckbox = document.getElementById('target-view-source-selection');
 const initialLocation = document.getElementById('initial-location');
 const additionalPermissionsBookmarksCheckbox = document.getElementById('additional-permissions-bookmarks');
+const additionalPermissionsHostCheckbox = document.getElementById('additional-permissions-host');
+const userAgentDefaultRadio = document.getElementById('user-agent-default');
+const userAgentFirefoxosRadio = document.getElementById('user-agent-firefoxos');
+const userAgentAndroidRadio = document.getElementById('user-agent-android');
+const userAgentIosRadio = document.getElementById('user-agent-ios');
 const placementAllRadio = document.getElementById('placement-all');
 const placementTabRadio = document.getElementById('placement-tab');
 const placementWindowRadio = document.getElementById('placement-window');
@@ -40,27 +47,24 @@ const placementWindowRadio = document.getElementById('placement-window');
 main();
 
 async function main() {
-	await readKeys();
+	await readValues();
 	initDocuments();
 	addEventListeners();
-	browser.permissions.onAdded.addListener(checkPermissions);
-	browser.permissions.onRemoved.addListener(checkPermissions);
 	checkProtocols();
 	checkTargets();
 	checkCheckboxes();
 	checkInitialLocation();
-	checkPermissions();
+	await checkPermissions();
+	checkUserAgents();
 	checkBehaviors();
 }
 
 function addEventListeners() {
-	for (let checkbox of checkboxes) {
-		checkbox.addEventListener('click', checkboxesOnClick);
-	}
-	document.options.protocol.forEach((element) => element.addEventListener('click', protocolOnClick));
-	document.options.target.forEach((element) => element.addEventListener('click', targetOnClick));
-	initialLocation.addEventListener('click', (event) => initialLocation.style.backgroundColor = '');
-	initialLocation.addEventListener('keydown', (event) => {
+	document.options.targetCheckbox.forEach(element => element.addEventListener('click', checkboxesOnClick));
+	document.options.protocol.forEach(element => element.addEventListener('click', protocolOnClick));
+	document.options.target.forEach(element => element.addEventListener('click', targetOnClick));
+	initialLocation.addEventListener('click', () => initialLocation.style.backgroundColor = '');
+	initialLocation.addEventListener('keydown', event => {
 		if (event.key === 'Enter') {
 			if (initialLocation.value === '') {
 				browser.storage.local.remove(storageKeys.initialLocation);
@@ -72,27 +76,30 @@ function addEventListeners() {
 			initialLocation.style.backgroundColor = 'LightGreen';
 		}
 	});
-	additionalPermissionsBookmarksCheckbox.addEventListener('click', requestPermission);
-	document.options.placement.forEach((element) => element.addEventListener('click', placementOnClick));
+	document.options.additionalPermissions.forEach(element => element.addEventListener('click', requestPermission));
+	browser.permissions.onAdded.addListener(checkPermissions);
+	browser.permissions.onRemoved.addListener(checkPermissions);
+	document.options.userAgent.forEach(element => element.addEventListener('click', userAgentOnClick));
+	document.options.placement.forEach(element => element.addEventListener('click', placementOnClick));
 }
 
 function checkBehaviors() {
-	browser.storage.local.get(storageKeys.placement).then((item) => {
+	browser.storage.local.get(storageKeys.placement).then(item => {
 		switch (item[storageKeys.placement]) {
-			case placementKeys.all:
+			case placements.all:
 				placementAllRadio.checked = true;
 				break;
-			case placementKeys.tab:
+			case placements.tab:
 				placementTabRadio.checked = true;
 				break;
-			case placementKeys.window:
+			case placements.window:
 				placementWindowRadio.checked = true;
 				break;
 		}
 	});
 }
 
-function checkboxesOnClick(event) {
+function checkboxesOnClick() {
 	saveConfig({
 		[storageKeys.bookmark]: targetBookmarkCheckbox.checked,
 		[storageKeys.link]: targetLinkCheckbox.checked,
@@ -106,9 +113,9 @@ function checkboxesOnClick(event) {
 }
 
 function checkCheckboxes() {
-	browser.storage.local.get([storageKeys.link, storageKeys.selection, storageKeys.viewSourceLink, storageKeys.viewSourceSelection]).then((item) => {
+	browser.storage.local.get().then(item => {
 		targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
-		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.selection];
+		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.link];
 		targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
 		targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
 		targetViewSourceFromBookmarkCheckbox.checked = item[storageKeys.viewSourceFromBookmark] === undefined ? true : item[storageKeys.viewSourceFromBookmark];
@@ -119,22 +126,24 @@ function checkCheckboxes() {
 }
 
 function checkInitialLocation() {
-	browser.storage.local.get(storageKeys.initialLocation).then((item) => {
+	browser.storage.local.get(storageKeys.initialLocation).then(item => {
 		initialLocation.value = item[storageKeys.initialLocation] || '';
 	});
 }
 
-function checkPermissions() {
-	browser.permissions.getAll().then(permissions => additionalPermissionsBookmarksCheckbox.checked = permissions.permissions.includes('bookmarks'));
+async function checkPermissions() {
+	additionalPermissionsBookmarksCheckbox.checked = await browser.permissions.contains(bookmarksPermissions);
+	additionalPermissionsHostCheckbox.checked = await browser.permissions.contains(hostPermissions);
+	toggleUserAgentRadioDisabled(!additionalPermissionsHostCheckbox.checked);
 }
 
 function checkProtocols() {
-	browser.storage.local.get([storageKeys.protocol]).then((item) => {
+	browser.storage.local.get([storageKeys.protocol]).then(item => {
 		switch (item[storageKeys.protocol]) {
-			case protocolKeys.http:
+			case protocols.http:
 				protocolHttpRadio.checked = true;
 				break;
-			case protocolKeys.https:
+			case protocols.https:
 				protocolHttpsRadio.checked = true;
 				break;
 		}
@@ -142,14 +151,33 @@ function checkProtocols() {
 }
 
 function checkTargets() {
-	browser.storage.local.get(storageKeys.target).then((item) => {
+	browser.storage.local.get(storageKeys.target).then(item => {
 		switch (item[storageKeys.target]) {
-			case targetKeys.ask:
+			case targets.ask:
 				targetAskRadio.checked = true;
 				break;
-			case targetKeys.specify:
+			case targets.specify:
 				targetSpecifyRadio.checked = true;
-				toggleCheckboxsDisabled(false);
+				toggleTargetCheckboxesDisabled(false);
+				break;
+		}
+	});
+}
+
+function checkUserAgents() {
+	browser.storage.local.get(storageKeys.userAgent).then(item => {
+		switch (item[storageKeys.userAgent]) {
+			case userAgents.android:
+				userAgentAndroidRadio.checked = true;
+				break;
+			case userAgents.default:
+				userAgentDefaultRadio.checked = true;
+				break;
+			case userAgents.firefoxOS:
+				userAgentFirefoxosRadio.checked = true;
+				break;
+			case userAgents.iOS:
+				userAgentIosRadio.checked = true;
 				break;
 		}
 	});
@@ -177,6 +205,11 @@ function initDocuments() {
 	document.getElementById('initialLocationLabel').innerText = browser.i18n.getMessage('initialLocationDescription');
 	document.getElementById('additionalPermissionsLegend').innerText = browser.i18n.getMessage('additionalPermissions');
 	document.getElementById('bookmarksLabel').innerText = browser.i18n.getMessage('bookmarks');
+	document.getElementById('hostLabel').innerText = browser.i18n.getMessage('host');
+	document.getElementById('useragentLegend').innerText = browser.i18n.getMessage('useragent');
+	document.getElementById('defaultLabel').innerText = browser.i18n.getMessage('default');
+	document.getElementById('informationDivision').innerText = browser.i18n.getMessage('optionsUserAgentHTMLInformation');
+	document.getElementById('cautionDivision').innerText = browser.i18n.getMessage('optionsUserAgentHTMLCaution');
 	document.getElementById('placementLegend').innerText = browser.i18n.getMessage('placement');
 	document.getElementById('placementAllLabel').innerText = browser.i18n.getMessage('all');
 	document.getElementById('placementAllCautionLabel').innerText = browser.i18n.getMessage('placementAllCaution');
@@ -195,76 +228,107 @@ function notifyRefreshing() {
 
 function placementOnClick(event) {
 	switch (event.target.id) {
-		case 'placement-all':
-			saveConfig({ [storageKeys.placement]: placementKeys.all });
+		case placementAllRadio.id:
+			saveConfig({ [storageKeys.placement]: placements.all });
 			break;
-		case 'placement-tab':
-			saveConfig({ [storageKeys.placement]: placementKeys.tab });
+		case placementTabRadio.id:
+			saveConfig({ [storageKeys.placement]: placements.tab });
 			break;
-		case 'placement-window':
-			saveConfig({ [storageKeys.placement]: placementKeys.window });
+		case placementWindowRadio.id:
+			saveConfig({ [storageKeys.placement]: placements.window });
 			break;
 	}
 }
 
 function protocolOnClick(event) {
 	switch (event.target.id) {
-		case 'protocol-ask':
-			saveConfig({ [storageKeys.protocol]: protocolKeys.ask });
+		case protocolAskRadio.id:
+			saveConfig({ [storageKeys.protocol]: protocols.ask });
 			break;
-		case 'protocol-http':
-			saveConfig({ [storageKeys.protocol]: protocolKeys.http });
+		case protocolHttpRadio.id:
+			saveConfig({ [storageKeys.protocol]: protocols.http });
 			break;
-		case 'protocol-https':
-			saveConfig({ [storageKeys.protocol]: protocolKeys.https });
+		case protocolHttpsRadio.id:
+			saveConfig({ [storageKeys.protocol]: protocols.https });
 			break;
 	}
 }
 
-async function readKeys() {
-	const keyFiles = ['PlacementKeys.json', 'ProtocolKeys.json', 'StorageKeys.json', 'TargetKeys.json'].map(keyFile => `/_values/${keyFile}`);
-	return Promise.all(keyFiles.map(keyFile => fetch((keyFile)))).then(values => {
+async function readValues() {
+	const keyFiles = ['Placements.json', 'Protocols.json', 'StorageKeys.json', 'Targets.json', 'UserAgents.json'].map(keyFile => `/_values/${keyFile}`);
+	return Promise.all(keyFiles.map(keyFile => fetch(keyFile))).then(values => {
 		return Promise.all(values.map(value => value.text()));
 	}).then(values => {
-		placementKeys = JSON.parse(values[0]);
-		protocolKeys = JSON.parse(values[1]);
+		placements = JSON.parse(values[0]);
+		protocols = JSON.parse(values[1]);
 		storageKeys = JSON.parse(values[2]);
-		targetKeys = JSON.parse(values[3]);
+		targets = JSON.parse(values[3]);
+		userAgents = JSON.parse(values[4]);
 	});
 }
 
 function requestPermission(event) {
-	if (event.originalTarget.id === 'additional-permissions-bookmarks') {
-		const bookmarkPermission = { permissions: ['bookmarks'] };
-		if (additionalPermissionsBookmarksCheckbox.checked) {
-			browser.permissions.request(bookmarkPermission).then((accepted) => {
-				additionalPermissionsBookmarksCheckbox.checked = accepted;
-			});
-		} else {
-			browser.permissions.remove(bookmarkPermission);
-		}
-	}
-}
-
-function targetOnClick(event) {
-	switch (event.target.id) {
-		case 'target-ask':
-			saveConfig({ [storageKeys.target]: targetKeys.ask });
-			toggleCheckboxsDisabled(true);
-			break;
-		case 'target-specify':
-			saveConfig({ [storageKeys.target]: targetKeys.specify });
-			toggleCheckboxsDisabled(false);
-			break;
-	}
-}
-
-function toggleCheckboxsDisabled(disabled) {
-	for (let i = 0; i < checkboxes.length; i++) {
-		checkboxes[i].disabled = disabled;
+	switch (event.originalTarget.id) {
+		case additionalPermissionsBookmarksCheckbox.id:
+			if (additionalPermissionsBookmarksCheckbox.checked) {
+				browser.permissions.request(bookmarksPermissions).then(accepted => {
+					additionalPermissionsBookmarksCheckbox.checked = accepted;
+				});
+			} else {
+				browser.permissions.remove(bookmarksPermissions);
+			}
+		case additionalPermissionsHostCheckbox.id:
+			if (additionalPermissionsHostCheckbox.checked) {
+				browser.permissions.request(hostPermissions).then(accepted => {
+					additionalPermissionsHostCheckbox.checked = accepted;
+					toggleUserAgentRadioDisabled(!accepted);
+				});
+			} else {
+				browser.permissions.remove(hostPermissions);
+				toggleUserAgentRadioDisabled(true);
+			}
+		default:
 	}
 }
 
 function saveConfig(keys) {
 	browser.storage.local.set(keys).then(notifyRefreshing());
+}
+
+function targetOnClick(event) {
+	switch (event.target.id) {
+		case targetAskRadio.id:
+			saveConfig({ [storageKeys.target]: targets.ask });
+			toggleTargetCheckboxesDisabled(true);
+			break;
+		case targetSpecifyRadio.id:
+			saveConfig({ [storageKeys.target]: targets.specify });
+			toggleTargetCheckboxesDisabled(false);
+			break;
+	}
+}
+
+function toggleTargetCheckboxesDisabled(disabled) {
+	document.options.targetCheckbox.forEach(element => element.disabled = disabled);
+}
+
+function toggleUserAgentRadioDisabled(disabled) {
+	document.options.userAgent.forEach(element => element.disabled = disabled);
+}
+
+function userAgentOnClick(event) {
+	switch (event.target.id) {
+		case userAgentAndroidRadio.id:
+			saveConfig({ [storageKeys.userAgent]: userAgents.android });
+			break;
+		case userAgentDefaultRadio.id:
+			saveConfig({ [storageKeys.userAgent]: userAgents.default });
+			break;
+		case userAgentFirefoxosRadio.id:
+			saveConfig({ [storageKeys.userAgent]: userAgents.firefoxOS });
+			break;
+		case userAgentIosRadio.id:
+			saveConfig({ [storageKeys.userAgent]: userAgents.iOS });
+			break;
+	}
 }
