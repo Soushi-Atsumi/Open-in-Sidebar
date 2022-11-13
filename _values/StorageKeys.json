@@ -19,6 +19,8 @@
 
 	"target": "Target",
 
+	"userAgent": "UserAgent",
+
 	"viewSourceFromBookmark": "ViewSourceFromBookmark",
 
 	"viewSourceLink": "ViewSourceLink",

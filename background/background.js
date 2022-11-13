@@ -11,11 +11,12 @@
  */
 'use strict';
 
-var placementKeys;
-var protocolKeys;
-var storageKeys;
-var targetKeys;
-var currentSettings;
+let placements;
+let protocols;
+let storageKeys;
+let targets;
+let userAgents;
+let currentSettings;
 
 const optionsId = 'options';
 const tutorialId = 'tutorial';
@@ -41,35 +42,73 @@ const viewSourceHttpBookmarkId = 'view-source-http-Bookmark';
 const viewSourceHttpLinkId = 'view-source-http-link';
 const viewSourceHttpPageId = 'view-source-http-page';
 const viewSourceHttpSelectionId = 'view-source-http-selection';
+const bookmarksPermissions = { permissions: ['bookmarks'] };
+const hostPermissions = { origins: ['*://*/*'] };
 
 main();
 
 async function main() {
-	await readKeys();
-	browser.browserAction.onClicked.addListener((tab) => {
+	await readValues();
+	browser.browserAction.onClicked.addListener(() => {
 		browser.sidebarAction.close();
 		browser.sidebarAction.open();
 	});
 	browser.contextMenus.onClicked.addListener(openInTheSidebar);
-	browser.permissions.onAdded.addListener(updateContextMenus);
-	browser.permissions.onRemoved.addListener(updateContextMenus);
-	browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+	const filter = { tabId: -1, urls: ['*://*/*'] };
+	const extraInfoSpec = ['blocking', 'requestHeaders'];
+	const onBeforeSendHeadersListener = details => {
+		details.requestHeaders.filter(requestHeader => requestHeader.name.toLowerCase() === 'user-agent').forEach(element => {
+			switch (currentSettings[storageKeys.userAgent]) {
+				case userAgents.android:
+					element.value = element.value.replace(/\(.+?;/, '(Android;');
+					break;
+				case userAgents.firefoxOS:
+					element.value = element.value.replace(/\(.+?;/, '(Mobile;');
+					break;
+				case userAgents.iOS:
+					element.value = element.value.replace(/\(.+?;/, '(iPhone;');
+					break;
+			}
+		});
+
+		return { requestHeaders: details.requestHeaders };
+	};
+	const permissionsOnAddedListener = permissions => {
+		if (bookmarksPermissions.permissions.every(permission => permissions.permissions.includes(permission))) {
+			updateContextMenus();
+		} else if (hostPermissions.origins.every(origin => permissions.origins.includes(origin))) {
+			browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeadersListener, filter, extraInfoSpec);
+		}
+	};
+	const permissionsOnRemovedListener = permissions => {
+		if (bookmarksPermissions.permissions.every(permission => permissions.permissions.includes(permission))) {
+			updateContextMenus();
+		} else if (hostPermissions.origins.every(origin => permissions.origins.includes(origin))) {
+			browser.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener);
+		}
+	};
+	browser.permissions.onAdded.addListener(permissionsOnAddedListener);
+	browser.permissions.onRemoved.addListener(permissionsOnRemovedListener);
+	browser.runtime.onMessage.addListener((message, _0, _1) => {
 		if (message.action === 'refresh') {
-			browser.storage.local.get().then((item) => {
+			browser.storage.local.get().then(item => {
 				currentSettings = item;
-				return updateContextMenus();
+				updateContextMenus();
 			});
 		}
 	});
-	browser.storage.local.get().then((item) => {
+	browser.storage.local.get().then(item => {
 		currentSettings = item;
 		return createContextMenus();
 	});
+	if (await browser.permissions.contains(hostPermissions)) {
+		browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeadersListener, filter, extraInfoSpec);
+	}
 }
 
 async function createContextMenus() {
 	const contextMenusObject = await createContextMenusObject();
-	const manifest = JSON.parse(await (await fetch("manifest.json")).text());
+	const manifest = JSON.parse(await (await fetch('manifest.json')).text());
 
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
@@ -85,32 +124,25 @@ async function createContextMenus() {
 		title: browser.i18n.getMessage('openOptions')
 	});
 
-	for (let i in contextMenusObject) {
-		for (let j in contextMenusObject[i]) {
+	for (const i in contextMenusObject) {
+		for (const j in contextMenusObject[i]) {
 			browser.contextMenus.create(contextMenusObject[i][j]);
 		}
 	}
 }
 
 async function createContextMenusObject() {
-	const protocol = currentSettings[storageKeys.protocol] === undefined ? protocolKeys.ask : currentSettings[storageKeys.protocol];
-	const target = currentSettings[storageKeys.target] === undefined ? targetKeys.ask : currentSettings[storageKeys.target];
-
-	let hasBookmarkPermission = false;
-	await browser.permissions.getAll().then(result => {
-		if (result.permissions.includes('bookmarks')) {
-			hasBookmarkPermission = true;
-		}
-	});
-
-	const bookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.bookmark] === undefined ? true : currentSettings[storageKeys.bookmark]);
-	const linkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
-	const pageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
-	const selectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
-	const viewSourceFromBookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.viewSourceFromBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceFromBookmark]);
-	const viewSourceLinkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
-	const viewSourcePageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
-	const viewSourceSelectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
+	const protocol = currentSettings[storageKeys.protocol] === undefined ? protocols.ask : currentSettings[storageKeys.protocol];
+	const target = currentSettings[storageKeys.target] === undefined ? targets.ask : currentSettings[storageKeys.target];
+	const hasBookmarkPermission = await browser.permissions.contains(bookmarksPermissions);
+	const bookmarkIsEnabled = hasBookmarkPermission && (target === targets.ask || currentSettings[storageKeys.bookmark] === undefined ? true : currentSettings[storageKeys.bookmark]);
+	const linkIsEnabled = target === targets.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
+	const pageIsEnabled = target === targets.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
+	const selectionIsEnabled = target === targets.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
+	const viewSourceFromBookmarkIsEnabled = hasBookmarkPermission && (target === targets.ask || currentSettings[storageKeys.viewSourceFromBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceFromBookmark]);
+	const viewSourceLinkIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
+	const viewSourcePageIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
+	const viewSourceSelectionIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
 
 	const contextMenusObject = {
 		http: {},
@@ -128,77 +160,77 @@ async function createContextMenusObject() {
 		contexts: ['audio'],
 		id: httpAudioId,
 		title: `${browser.i18n.getMessage('openThisAudio')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https
+		visible: protocol !== protocols.https
 	};
 
 	contextMenusObject.http.bookmark = {
 		contexts: ['bookmark'],
 		id: httpBookmarkId,
 		title: `${browser.i18n.getMessage('openThisBookmark')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https && bookmarkIsEnabled
+		visible: protocol !== protocols.https && bookmarkIsEnabled
 	};
 
 	contextMenusObject.http.image = {
 		contexts: ['image'],
 		id: httpImageId,
 		title: `${browser.i18n.getMessage('openThisImage')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https
+		visible: protocol !== protocols.https
 	};
 
 	contextMenusObject.http.link = {
 		contexts: ['link'],
 		id: httpLinkId,
 		title: `${browser.i18n.getMessage('openThisLink')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https && linkIsEnabled
+		visible: protocol !== protocols.https && linkIsEnabled
 	};
 
 	contextMenusObject.http.page = {
 		contexts: ['page', 'tab'],
 		id: httpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https && pageIsEnabled
+		visible: protocol !== protocols.https && pageIsEnabled
 	};
 
 	contextMenusObject.http.selection = {
 		contexts: ['selection'],
 		id: httpSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https && selectionIsEnabled
+		visible: protocol !== protocols.https && selectionIsEnabled
 	};
 
 	contextMenusObject.http.video = {
 		contexts: ['video'],
 		id: httpVideoId,
 		title: `${browser.i18n.getMessage('openThisVideo')}(${useHttpMessage})`,
-		visible: protocol !== protocolKeys.https
+		visible: protocol !== protocols.https
 	};
 
 	contextMenusObject.http.viewSourceFromBookmark = {
 		contexts: ['bookmark'],
 		id: viewSourceHttpBookmarkId,
 		title: `${browser.i18n.getMessage('openThisBookmark')}${viewSourceHttpMessage}`,
-		visible: protocol !== protocolKeys.https && viewSourceFromBookmarkIsEnabled
+		visible: protocol !== protocols.https && viewSourceFromBookmarkIsEnabled
 	};
 
 	contextMenusObject.http.viewSourceLink = {
 		contexts: ['link'],
 		id: viewSourceHttpLinkId,
 		title: `${browser.i18n.getMessage('openThisLink')}${viewSourceHttpMessage}`,
-		visible: protocol !== protocolKeys.https && viewSourceLinkIsEnabled
+		visible: protocol !== protocols.https && viewSourceLinkIsEnabled
 	};
 
 	contextMenusObject.http.viewSourcePage = {
 		contexts: ['page', 'tab'],
 		id: viewSourceHttpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpMessage}`,
-		visible: protocol !== protocolKeys.https && viewSourcePageIsEnabled
+		visible: protocol !== protocols.https && viewSourcePageIsEnabled
 	};
 
 	contextMenusObject.http.viewSourceSelection = {
 		contexts: ['selection'],
 		id: viewSourceHttpSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpMessage}`,
-		visible: protocol !== protocolKeys.https && viewSourceSelectionIsEnabled
+		visible: protocol !== protocols.https && viewSourceSelectionIsEnabled
 	};
 
 	// https
@@ -206,77 +238,77 @@ async function createContextMenusObject() {
 		contexts: ['audio'],
 		id: httpsAudioId,
 		title: `${browser.i18n.getMessage('openThisAudio')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http
+		visible: protocol !== protocols.http
 	};
 
 	contextMenusObject.https.bookmark = {
 		contexts: ['bookmark'],
 		id: httpsBookmarkId,
 		title: `${browser.i18n.getMessage('openThisBookmark')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http && bookmarkIsEnabled
+		visible: protocol !== protocols.http && bookmarkIsEnabled
 	};
 
 	contextMenusObject.https.image = {
 		contexts: ['image'],
 		id: httpsImageId,
 		title: `${browser.i18n.getMessage('openThisImage')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http
+		visible: protocol !== protocols.http
 	};
 
 	contextMenusObject.https.link = {
 		contexts: ['link'],
 		id: httpsLinkId,
 		title: `${browser.i18n.getMessage('openThisLink')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http && linkIsEnabled
+		visible: protocol !== protocols.http && linkIsEnabled
 	};
 
 	contextMenusObject.https.page = {
 		contexts: ['page', 'tab'],
 		id: httpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http && pageIsEnabled
+		visible: protocol !== protocols.http && pageIsEnabled
 	};
 
 	contextMenusObject.https.selection = {
 		contexts: ['selection'],
 		id: httpsSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http && selectionIsEnabled
+		visible: protocol !== protocols.http && selectionIsEnabled
 	};
 
 	contextMenusObject.https.video = {
 		contexts: ['video'],
 		id: httpsVideoId,
 		title: `${browser.i18n.getMessage('openThisVideo')}(${useHttpsMessage})`,
-		visible: protocol !== protocolKeys.http
+		visible: protocol !== protocols.http
 	};
 
 	contextMenusObject.https.viewSourceFromBookmark = {
 		contexts: ['bookmark'],
 		id: viewSourceHttpsBookmarkId,
 		title: `${browser.i18n.getMessage('openThisBookmark')}${viewSourceHttpsMessage}`,
-		visible: protocol !== protocolKeys.http && viewSourceFromBookmarkIsEnabled
+		visible: protocol !== protocols.http && viewSourceFromBookmarkIsEnabled
 	};
 
 	contextMenusObject.https.viewSourceLink = {
 		contexts: ['link'],
 		id: viewSourceHttpsLinkId,
 		title: `${browser.i18n.getMessage('openThisLink')}${viewSourceHttpsMessage}`,
-		visible: protocol !== protocolKeys.http && viewSourceLinkIsEnabled
+		visible: protocol !== protocols.http && viewSourceLinkIsEnabled
 	};
 
 	contextMenusObject.https.viewSourcePage = {
 		contexts: ['page', 'tab'],
 		id: viewSourceHttpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpsMessage}`,
-		visible: protocol !== protocolKeys.http && viewSourcePageIsEnabled
+		visible: protocol !== protocols.http && viewSourcePageIsEnabled
 	};
 
 	contextMenusObject.https.viewSourceSelection = {
 		contexts: ['selection'],
 		id: viewSourceHttpsSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpsMessage}`,
-		visible: protocol !== protocolKeys.http && viewSourceSelectionIsEnabled
+		visible: protocol !== protocols.http && viewSourceSelectionIsEnabled
 	};
 
 	return contextMenusObject;
@@ -388,36 +420,37 @@ async function openInTheSidebar(info, tab) {
 		}
 	}
 
-	let setPanelParameters = {
+	const setPanelParameters = {
 		panel: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href
 	};
 
-	if (currentSettings[storageKeys.placement] === placementKeys.tab) {
+	if (currentSettings[storageKeys.placement] === placements.tab) {
 		setPanelParameters.tabId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].id;
-	} else if (currentSettings[storageKeys.placement] === placementKeys.window) {
+	} else if (currentSettings[storageKeys.placement] === placements.window) {
 		setPanelParameters.windowId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].windowId;
 	}
 
 	browser.sidebarAction.setPanel(setPanelParameters);
 }
 
-async function readKeys() {
-	const keyFiles = ['PlacementKeys.json', 'ProtocolKeys.json', 'StorageKeys.json', 'TargetKeys.json'].map(keyFile => `/_values/${keyFile}`);
-	return Promise.all(keyFiles.map(keyFile => fetch((keyFile)))).then(values => {
+async function readValues() {
+	const keyFiles = ['Placements.json', 'Protocols.json', 'StorageKeys.json', 'Targets.json', 'UserAgents.json'].map(keyFile => `/_values/${keyFile}`);
+	return Promise.all(keyFiles.map(keyFile => fetch(keyFile))).then(values => {
 		return Promise.all(values.map(value => value.text()));
 	}).then(values => {
-		placementKeys = JSON.parse(values[0]);
-		protocolKeys = JSON.parse(values[1]);
+		placements = JSON.parse(values[0]);
+		protocols = JSON.parse(values[1]);
 		storageKeys = JSON.parse(values[2]);
-		targetKeys = JSON.parse(values[3]);
+		targets = JSON.parse(values[3]);
+		userAgents = JSON.parse(values[4]);
 	});
 }
 
 async function updateContextMenus() {
 	const contextMenusObject = await createContextMenusObject();
 
-	for (let i in contextMenusObject) {
-		for (let j in contextMenusObject[i]) {
+	for (const i in contextMenusObject) {
+		for (const j in contextMenusObject[i]) {
 			browser.contextMenus.update(contextMenusObject[i][j].id, { visible: contextMenusObject[i][j].visible });
 		}
 	}

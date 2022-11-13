@@ -45,14 +45,14 @@
 
 	"name": "__MSG_extensionName__",
 
-	"optional_permissions": [ "bookmarks" ],
+	"optional_permissions": [ "*://*/*", "bookmarks" ],
 
 	"options_ui": {
 		"page": "options/options.html",
 		"browser_style": true
 	},
 
-	"permissions": [ "activeTab", "contextMenus", "storage" ],
+	"permissions": [ "activeTab", "contextMenus", "storage", "webRequest", "webRequestBlocking" ],
 
 	"sidebar_action": {
 		"browser_style": true,
@@ -67,5 +67,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "3.2"
+	"version": "4.0"
 }
