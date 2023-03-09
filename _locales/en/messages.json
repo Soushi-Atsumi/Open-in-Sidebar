@@ -186,6 +186,10 @@
 		"message": "Protocol"
 	},
 
+	"reload": {
+		"message": "Reload"
+	},
+
 	"specify": {
 		"message": "Specify"
 	},
@@ -205,6 +209,14 @@
 
 	"thisUrlIsNotAValidUrl": {
 		"message": "This url is not a valid url."
+	},
+
+	"toggle": {
+		"message": "Toggle"
+	},
+
+	"toolbarIconAction": {
+		"message": "Toolbar Icon Action"
 	},
 
 	"tutorialTitle": {

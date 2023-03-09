@@ -1,9 +1,9 @@
 ﻿{
 	"ask": "Ask",
 
-	"initialLocation": "InitialLocation",
-
 	"bookmark": "Bookmark",
+
+	"initialLocation": "InitialLocation",
 
 	"link": "Link",
 
@@ -18,6 +18,8 @@
 	"specify": "Specify",
 
 	"target": "Target",
+
+	"toolbarIconAction": "ToolbarIconAction",
 
 	"userAgent": "UserAgent",
 
