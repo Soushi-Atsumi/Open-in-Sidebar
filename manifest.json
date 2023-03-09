@@ -1,12 +1,6 @@
 ﻿{
 	"$schema": "http://json.schemastore.org/webextension",
 
-	"applications": {
-		"gecko": {
-			"strict_min_version": "77.0"
-		}
-	},
-
 	"background": {
 		"scripts": [ "background/background.js" ]
 	},
@@ -20,6 +14,21 @@
 			"384": "icons/icon-384.png",
 			"768": "icons/icon-768.png",
 			"1536": "icons/icon-1536.png"
+		}
+	},
+
+	"browser_specific_settings": {
+		"gecko": {
+			"strict_min_version": "77.0"
+		}
+	},
+
+	"commands": {
+		"_execute_sidebar_action": {
+			"suggested_key": {
+				"default": "Alt+O"
+			},
+			"description": "__MSG_extensionDescription__"
 		}
 	},
 
@@ -67,5 +76,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "4.0"
+	"version": "4.1"
 }

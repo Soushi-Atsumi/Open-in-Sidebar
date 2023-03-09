@@ -186,6 +186,10 @@
 		"message": "プロトコル"
 	},
 
+	"reload": {
+		"message": "更新"
+	},
+
 	"specify": {
 		"message": "指定する"
 	},
@@ -205,6 +209,14 @@
 
 	"thisUrlIsNotAValidUrl": {
 		"message": "このurlは無効なurlです。"
+	},
+
+	"toggle": {
+		"message": "切り替え"
+	},
+
+	"toolbarIconAction": {
+		"message": "ツールバーアイコンの動作"
 	},
 
 	"tutorialTitle": {

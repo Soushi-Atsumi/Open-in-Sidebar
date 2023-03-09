@@ -15,6 +15,7 @@ let placements;
 let protocols;
 let storageKeys;
 let targets;
+let toolbarIconActions;
 let userAgents;
 
 const bookmarksPermissions = { permissions: ['bookmarks'] };
@@ -43,6 +44,8 @@ const userAgentIosRadio = document.getElementById('user-agent-ios');
 const placementAllRadio = document.getElementById('placement-all');
 const placementTabRadio = document.getElementById('placement-tab');
 const placementWindowRadio = document.getElementById('placement-window');
+const toolbarIconActionReloadRadio = document.getElementById('toolbarIconAction-reload');
+const toolbarIconActionToggleRadio = document.getElementById('toolbarIconAction-toggle');
 
 main();
 
@@ -56,7 +59,8 @@ async function main() {
 	checkInitialLocation();
 	await checkPermissions();
 	checkUserAgents();
-	checkBehaviors();
+	checkPlacements();
+	checkToolbarIconAction();
 }
 
 function addEventListeners() {
@@ -81,22 +85,7 @@ function addEventListeners() {
 	browser.permissions.onRemoved.addListener(checkPermissions);
 	document.options.userAgent.forEach(element => element.addEventListener('click', userAgentOnClick));
 	document.options.placement.forEach(element => element.addEventListener('click', placementOnClick));
-}
-
-function checkBehaviors() {
-	browser.storage.local.get(storageKeys.placement).then(item => {
-		switch (item[storageKeys.placement]) {
-			case placements.all:
-				placementAllRadio.checked = true;
-				break;
-			case placements.tab:
-				placementTabRadio.checked = true;
-				break;
-			case placements.window:
-				placementWindowRadio.checked = true;
-				break;
-		}
-	});
+	document.options.toolbarIconAction.forEach(element => element.addEventListener('click', toolbarIconActionOnClick));
 }
 
 function checkboxesOnClick() {
@@ -137,6 +126,22 @@ async function checkPermissions() {
 	toggleUserAgentRadioDisabled(!additionalPermissionsHostCheckbox.checked);
 }
 
+function checkPlacements() {
+	browser.storage.local.get(storageKeys.placement).then(item => {
+		switch (item[storageKeys.placement]) {
+			case placements.all:
+				placementAllRadio.checked = true;
+				break;
+			case placements.tab:
+				placementTabRadio.checked = true;
+				break;
+			case placements.window:
+				placementWindowRadio.checked = true;
+				break;
+		}
+	});
+}
+
 function checkProtocols() {
 	browser.storage.local.get([storageKeys.protocol]).then(item => {
 		switch (item[storageKeys.protocol]) {
@@ -159,6 +164,19 @@ function checkTargets() {
 			case targets.specify:
 				targetSpecifyRadio.checked = true;
 				toggleTargetCheckboxesDisabled(false);
+				break;
+		}
+	});
+}
+
+function checkToolbarIconAction() {
+	browser.storage.local.get(storageKeys.target).then(item => {
+		switch (item[storageKeys.toolbarIconAction]) {
+			case toolbarIconActions.reload:
+				toolbarIconActionReloadRadio.checked = true;
+				break;
+			case toolbarIconActions.toggle:
+				toolbarIconActionToggleRadio.checked = true;
 				break;
 		}
 	});
@@ -220,6 +238,9 @@ function initDocuments() {
 	document.getElementById('placementWindowLabel').innerText = browser.i18n.getMessage('window');
 	document.getElementById('placementWindowCautionLabel').innerText = browser.i18n.getMessage('placementWindowCaution');
 	document.getElementById('placementWindowDescriptionLabel').innerText = browser.i18n.getMessage('placementWindowDescription');
+	document.getElementById('toolbarIconActionLegend').innerText = browser.i18n.getMessage('toolbarIconAction');
+	document.getElementById('toolbarIconActionReloadLabel').innerText = browser.i18n.getMessage('reload');
+	document.getElementById('toolbarIconActionToggleLabel').innerText = browser.i18n.getMessage('toggle');
 }
 
 function notifyRefreshing() {
@@ -255,7 +276,7 @@ function protocolOnClick(event) {
 }
 
 async function readValues() {
-	const keyFiles = ['Placements.json', 'Protocols.json', 'StorageKeys.json', 'Targets.json', 'UserAgents.json'].map(keyFile => `/_values/${keyFile}`);
+	const keyFiles = ['Placements.json', 'Protocols.json', 'StorageKeys.json', 'Targets.json', 'ToolbarIconActions.json', 'UserAgents.json'].map(keyFile => `/_values/${keyFile}`);
 	return Promise.all(keyFiles.map(keyFile => fetch(keyFile))).then(values => {
 		return Promise.all(values.map(value => value.text()));
 	}).then(values => {
@@ -263,7 +284,8 @@ async function readValues() {
 		protocols = JSON.parse(values[1]);
 		storageKeys = JSON.parse(values[2]);
 		targets = JSON.parse(values[3]);
-		userAgents = JSON.parse(values[4]);
+		toolbarIconActions = JSON.parse(values[4]);
+		userAgents = JSON.parse(values[5]);
 	});
 }
 
@@ -314,6 +336,17 @@ function toggleTargetCheckboxesDisabled(disabled) {
 
 function toggleUserAgentRadioDisabled(disabled) {
 	document.options.userAgent.forEach(element => element.disabled = disabled);
+}
+
+function toolbarIconActionOnClick(event) {
+	switch (event.target.id) {
+		case toolbarIconActionReloadRadio.id:
+			saveConfig({ [storageKeys.toolbarIconAction]: toolbarIconActions.reload });
+			break;
+		case toolbarIconActionToggleRadio.id:
+			saveConfig({ [storageKeys.toolbarIconAction]: toolbarIconActions.toggle });
+			break;
+	}
 }
 
 function userAgentOnClick(event) {
