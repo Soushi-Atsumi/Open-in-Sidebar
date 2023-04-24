@@ -64,7 +64,7 @@
 	"permissions": [ "activeTab", "contextMenus", "storage", "webRequest", "webRequestBlocking" ],
 
 	"sidebar_action": {
-		"browser_style": true,
+		"browser_style": false,
 		"default_icon": {
 			"48": "icons/icon-48.png",
 			"96": "icons/icon-96.png",
@@ -76,5 +76,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "4.1"
+	"version": "4.2"
 }
