@@ -21,6 +21,7 @@ let userAgents;
 const bookmarksPermissions = { permissions: ['bookmarks'] };
 const hostPermissions = { origins: ['*://*/*'] };
 
+const enableSynchronizationCheckbox = document.getElementById('synchronization-enable');
 const protocolAskRadio = document.getElementById('protocol-ask');
 const protocolHttpRadio = document.getElementById('protocol-http');
 const protocolHttpsRadio = document.getElementById('protocol-https');
@@ -53,27 +54,39 @@ async function main() {
 	await readValues();
 	initDocuments();
 	addEventListeners();
+	checkSyncs();
 	checkProtocols();
 	checkTargets();
 	checkCheckboxes();
 	checkInitialLocation();
-	await checkPermissions();
+	checkPermissions();
 	checkUserAgents();
 	checkPlacements();
 	checkToolbarIconAction();
 }
 
 function addEventListeners() {
+	document.options.addEventListener('submit', event => event.preventDefault());
+	enableSynchronizationCheckbox.addEventListener('click', async () => {
+		if (enableSynchronizationCheckbox.checked) {
+			await browser.storage.sync.clear();
+			await browser.storage.sync.set(await browser.storage.local.get());
+		} else {
+			await browser.storage.local.clear();
+			await browser.storage.local.set(await browser.storage.sync.get());
+		}
+		await browser.storage.local.set({ [storageKeys.sync]: enableSynchronizationCheckbox.checked });
+	});
 	document.options.targetCheckbox.forEach(element => element.addEventListener('click', checkboxesOnClick));
 	document.options.protocol.forEach(element => element.addEventListener('click', protocolOnClick));
 	document.options.target.forEach(element => element.addEventListener('click', targetOnClick));
 	initialLocation.addEventListener('click', () => initialLocation.style.backgroundColor = '');
-	initialLocation.addEventListener('keydown', event => {
+	initialLocation.addEventListener('keydown', async event => {
 		if (event.key === 'Enter') {
 			if (initialLocation.value === '') {
-				browser.storage.local.remove(storageKeys.initialLocation);
+				(await getStorageType()).remove(storageKeys.initialLocation);
 			} else {
-				browser.storage.local.set({ [storageKeys.initialLocation]: initialLocation.value });
+				(await getStorageType()).set({ [storageKeys.initialLocation]: initialLocation.value });
 			}
 			event.preventDefault();
 			initialLocation.blur();
@@ -101,23 +114,20 @@ function checkboxesOnClick() {
 	});
 }
 
-function checkCheckboxes() {
-	browser.storage.local.get().then(item => {
-		targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
-		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.link];
-		targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
-		targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
-		targetViewSourceFromBookmarkCheckbox.checked = item[storageKeys.viewSourceFromBookmark] === undefined ? true : item[storageKeys.viewSourceFromBookmark];
-		targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
-		targetViewSourcePageCheckbox.checked = item[storageKeys.viewSourcePage] === undefined ? true : item[storageKeys.viewSourcePage];
-		targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
-	});
+async function checkCheckboxes() {
+	const item = await (await getStorageType()).get();
+	targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
+	targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.link];
+	targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
+	targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
+	targetViewSourceFromBookmarkCheckbox.checked = item[storageKeys.viewSourceFromBookmark] === undefined ? true : item[storageKeys.viewSourceFromBookmark];
+	targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
+	targetViewSourcePageCheckbox.checked = item[storageKeys.viewSourcePage] === undefined ? true : item[storageKeys.viewSourcePage];
+	targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
 }
 
-function checkInitialLocation() {
-	browser.storage.local.get(storageKeys.initialLocation).then(item => {
-		initialLocation.value = item[storageKeys.initialLocation] || '';
-	});
+async function checkInitialLocation() {
+	initialLocation.value = (await (await getStorageType()).get(storageKeys.initialLocation))[storageKeys.initialLocation] || '';
 }
 
 async function checkPermissions() {
@@ -126,84 +136,91 @@ async function checkPermissions() {
 	toggleUserAgentRadioDisabled(!additionalPermissionsHostCheckbox.checked);
 }
 
-function checkPlacements() {
-	browser.storage.local.get(storageKeys.placement).then(item => {
-		switch (item[storageKeys.placement]) {
-			case placements.all:
-				placementAllRadio.checked = true;
-				break;
-			case placements.tab:
-				placementTabRadio.checked = true;
-				break;
-			case placements.window:
-				placementWindowRadio.checked = true;
-				break;
-		}
-	});
+async function checkPlacements() {
+	const item = await (await getStorageType()).get(storageKeys.placement);
+	switch (item[storageKeys.placement]) {
+		case placements.all:
+			placementAllRadio.checked = true;
+			break;
+		case placements.tab:
+			placementTabRadio.checked = true;
+			break;
+		case placements.window:
+			placementWindowRadio.checked = true;
+			break;
+	}
 }
 
-function checkProtocols() {
-	browser.storage.local.get([storageKeys.protocol]).then(item => {
-		switch (item[storageKeys.protocol]) {
-			case protocols.http:
-				protocolHttpRadio.checked = true;
-				break;
-			case protocols.https:
-				protocolHttpsRadio.checked = true;
-				break;
-		}
-	});
+async function checkProtocols() {
+	const item = await (await getStorageType()).get([storageKeys.protocol]);
+	switch (item[storageKeys.protocol]) {
+		case protocols.http:
+			protocolHttpRadio.checked = true;
+			break;
+		case protocols.https:
+			protocolHttpsRadio.checked = true;
+			break;
+	}
 }
 
-function checkTargets() {
-	browser.storage.local.get(storageKeys.target).then(item => {
-		switch (item[storageKeys.target]) {
-			case targets.ask:
-				targetAskRadio.checked = true;
-				break;
-			case targets.specify:
-				targetSpecifyRadio.checked = true;
-				toggleTargetCheckboxesDisabled(false);
-				break;
-		}
-	});
+async function checkSyncs() {
+	const item = await browser.storage.local.get();
+	enableSynchronizationCheckbox.checked = Object.keys(item).length === 0 ? true : item[storageKeys.sync];
 }
 
-function checkToolbarIconAction() {
-	browser.storage.local.get(storageKeys.target).then(item => {
-		switch (item[storageKeys.toolbarIconAction]) {
-			case toolbarIconActions.reload:
-				toolbarIconActionReloadRadio.checked = true;
-				break;
-			case toolbarIconActions.toggle:
-				toolbarIconActionToggleRadio.checked = true;
-				break;
-		}
-	});
+async function checkTargets() {
+	const item = await (await getStorageType()).get(storageKeys.target);
+	switch (item[storageKeys.target]) {
+		case targets.ask:
+			targetAskRadio.checked = true;
+			break;
+		case targets.specify:
+			targetSpecifyRadio.checked = true;
+			toggleTargetCheckboxesDisabled(false);
+			break;
+	}
 }
 
-function checkUserAgents() {
-	browser.storage.local.get(storageKeys.userAgent).then(item => {
-		switch (item[storageKeys.userAgent]) {
-			case userAgents.android:
-				userAgentAndroidRadio.checked = true;
-				break;
-			case userAgents.default:
-				userAgentDefaultRadio.checked = true;
-				break;
-			case userAgents.firefoxOS:
-				userAgentFirefoxosRadio.checked = true;
-				break;
-			case userAgents.iOS:
-				userAgentIosRadio.checked = true;
-				break;
-		}
-	});
+async function checkToolbarIconAction() {
+	const item = await (await getStorageType()).get(storageKeys.toolbarIconAction);
+	switch (item[storageKeys.toolbarIconAction]) {
+		case toolbarIconActions.reload:
+			toolbarIconActionReloadRadio.checked = true;
+			break;
+		case toolbarIconActions.toggle:
+			toolbarIconActionToggleRadio.checked = true;
+			break;
+	}
+}
+
+async function checkUserAgents() {
+	const item = await (await getStorageType()).get(storageKeys.userAgent);
+	switch (item[storageKeys.userAgent]) {
+		case userAgents.android:
+			userAgentAndroidRadio.checked = true;
+			break;
+		case userAgents.default:
+			userAgentDefaultRadio.checked = true;
+			break;
+		case userAgents.firefoxOS:
+			userAgentFirefoxosRadio.checked = true;
+			break;
+		case userAgents.iOS:
+			userAgentIosRadio.checked = true;
+			break;
+	}
+}
+
+async function getStorageType() {
+	const item = await browser.storage.local.get();
+	return Object.keys(item).length === 0 || item[storageKeys.sync] ? browser.storage.sync : browser.storage.local;
 }
 
 function initDocuments() {
 	document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
 	document.title = browser.i18n.getMessage('optionsHTMLTitle');
+	document.getElementById('synchronizationLegend').innerText = browser.i18n.getMessage('synchronization');
+	document.getElementById('enabledLabel').innerText = browser.i18n.getMessage('enabled');
 	document.getElementById('protocolLegend').innerText = browser.i18n.getMessage('protocol');
 	document.getElementById('askProtocolLabel').innerText = browser.i18n.getMessage('ask');
 	document.getElementById('alwaysUsesHttpLabel').innerText = browser.i18n.getMessage('alwaysUsesHttp');
@@ -277,44 +294,40 @@ function protocolOnClick(event) {
 
 async function readValues() {
 	const keyFiles = ['Placements.json', 'Protocols.json', 'StorageKeys.json', 'Targets.json', 'ToolbarIconActions.json', 'UserAgents.json'].map(keyFile => `/_values/${keyFile}`);
-	return Promise.all(keyFiles.map(keyFile => fetch(keyFile))).then(values => {
-		return Promise.all(values.map(value => value.text()));
-	}).then(values => {
-		placements = JSON.parse(values[0]);
-		protocols = JSON.parse(values[1]);
-		storageKeys = JSON.parse(values[2]);
-		targets = JSON.parse(values[3]);
-		toolbarIconActions = JSON.parse(values[4]);
-		userAgents = JSON.parse(values[5]);
-	});
+	const jsonContents = await Promise.all(keyFiles.map(async keyFile => await (await fetch(keyFile)).json()));
+	placements = jsonContents[0];
+	protocols = jsonContents[1];
+	storageKeys = jsonContents[2];
+	targets = jsonContents[3];
+	toolbarIconActions = jsonContents[4];
+	userAgents = jsonContents[5];
 }
 
-function requestPermission(event) {
+async function requestPermission(event) {
 	switch (event.originalTarget.id) {
 		case additionalPermissionsBookmarksCheckbox.id:
 			if (additionalPermissionsBookmarksCheckbox.checked) {
-				browser.permissions.request(bookmarksPermissions).then(accepted => {
-					additionalPermissionsBookmarksCheckbox.checked = accepted;
-				});
+				additionalPermissionsBookmarksCheckbox.checked = await browser.permissions.request(bookmarksPermissions);
 			} else {
 				browser.permissions.remove(bookmarksPermissions);
 			}
+			break;
 		case additionalPermissionsHostCheckbox.id:
 			if (additionalPermissionsHostCheckbox.checked) {
-				browser.permissions.request(hostPermissions).then(accepted => {
-					additionalPermissionsHostCheckbox.checked = accepted;
-					toggleUserAgentRadioDisabled(!accepted);
-				});
+				const accepted = await browser.permissions.request(hostPermissions);
+				additionalPermissionsHostCheckbox.checked = accepted;
+				toggleUserAgentRadioDisabled(!accepted);
 			} else {
 				browser.permissions.remove(hostPermissions);
 				toggleUserAgentRadioDisabled(true);
 			}
-		default:
+			break;
 	}
 }
 
-function saveConfig(keys) {
-	browser.storage.local.set(keys).then(notifyRefreshing());
+async function saveConfig(keys) {
+	await (await getStorageType()).set(keys);
+	notifyRefreshing();
 }
 
 function targetOnClick(event) {

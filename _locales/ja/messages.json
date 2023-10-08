@@ -27,6 +27,10 @@
 		"message": "既定値"
 	},
 
+	"enabled": {
+		"message": "有効"
+	},
+
 	"errorHTMLTitle": {
 		"message": "エラー",
 		"description": "error.htmlの題名。"
@@ -197,6 +201,10 @@
 	"sidebarHTMLTitle": {
 		"message": "使い方",
 		"description": "sidebar.htmlの題名。"
+	},
+
+	"synchronization": {
+		"message": "同期"
 	},
 
 	"tab": {

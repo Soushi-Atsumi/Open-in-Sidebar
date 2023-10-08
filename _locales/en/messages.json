@@ -27,6 +27,10 @@
 		"message": "Default"
 	},
 
+	"enabled": {
+		"message": "Enabled"
+	},
+
 	"errorHTMLTitle": {
 		"message": "Error",
 		"description": "The title of error.html."
@@ -197,6 +201,10 @@
 	"sidebarHTMLTitle": {
 		"message": "Tutorial",
 		"description": "The title of sidebar.html."
+	},
+
+	"synchronization": {
+		"message": "Synchronization"
 	},
 
 	"tab": {

@@ -24,6 +24,6 @@ function initDocuments() {
 }
 
 async function setLocation() {
-	const storageKeys = JSON.parse(await (await fetch('/_values/StorageKeys.json')).text());
-	window.location = (await browser.storage.local.get(storageKeys.initialLocation))[storageKeys.initialLocation] ?? '/index.html';
+	const storageKeys = await (await fetch('/_values/StorageKeys.json')).json();
+	window.location = (await (await browser.storage.local.get(storageKeys.sync) ? browser.storage.sync : browser.storage.local).get(storageKeys.initialLocation))[storageKeys.initialLocation] ?? '/index.html';
 }

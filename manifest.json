@@ -19,6 +19,7 @@
 
 	"browser_specific_settings": {
 		"gecko": {
+			"id": "{23d6021a-cb48-47c8-bb14-980a69b6ea17}",
 			"strict_min_version": "77.0"
 		}
 	},
@@ -76,5 +77,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "4.2"
+	"version": "4.3"
 }
