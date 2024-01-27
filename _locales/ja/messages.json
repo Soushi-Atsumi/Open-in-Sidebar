@@ -109,6 +109,14 @@
 		"message": "選択文字から開く"
 	},
 
+	"openFromSidebar": {
+		"message": "サイドバーから開く"
+	},
+
+	"openFromTab": {
+		"message": "タブから開く"
+	},
+
 	"openOptions": {
 		"message": "設定を開く"
 	},
@@ -135,6 +143,14 @@
 
 	"openThisSelection": {
 		"message": "この選択文字を開く"
+	},
+
+	"openThisSidebar": {
+		"message": "このサイドバーを開く"
+	},
+
+	"openThisTab": {
+		"message": "このタブを開く"
 	},
 
 	"openThisVideo": {
@@ -264,6 +280,14 @@
 
 	"viewSourceFromSelection": {
 		"message": "選択文字のソースを開く"
+	},
+
+	"viewSourceFromSidebar": {
+		"message": "サイドバーのソースを開く"
+	},
+
+	"viewSourceFromTab": {
+		"message": "タブのソースを開く"
 	},
 
 	"watchTheVideo": {

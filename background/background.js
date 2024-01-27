@@ -27,22 +27,30 @@ const httpsImageId = 'https-image';
 const httpsLinkId = 'https-link';
 const httpsPageId = 'https-page';
 const httpsSelectionId = 'https-selection';
+const httpsSidebarId = 'https-sidebar';
+const httpsTabId = 'https-tab';
 const httpsVideoId = 'https-video';
 const viewSourceHttpsBookmarkId = 'view-source-https-Bookmark';
 const viewSourceHttpsLinkId = 'view-source-https-link';
 const viewSourceHttpsPageId = 'view-source-https-page';
 const viewSourceHttpsSelectionId = 'view-source-https-selection';
+const viewSourceHttpsSidebarionId = 'view-source-https-sidebar';
+const viewSourceHttpsTabionId = 'view-source-https-tab';
 const httpAudioId = 'http-audio';
 const httpBookmarkId = 'http-Bookmark';
 const httpImageId = 'http-image';
 const httpLinkId = 'http-link';
 const httpPageId = 'http-page';
 const httpSelectionId = 'http-selection';
+const httpSidebarId = 'http-sidebar';
+const httpTabId = 'http-tab';
 const httpVideoId = 'http-video';
 const viewSourceHttpBookmarkId = 'view-source-http-Bookmark';
 const viewSourceHttpLinkId = 'view-source-http-link';
 const viewSourceHttpPageId = 'view-source-http-page';
 const viewSourceHttpSelectionId = 'view-source-http-selection';
+const viewSourceHttpSidebarionId = 'view-source-http-sidebar';
+const viewSourceHttpTabionId = 'view-source-http-tab';
 const bookmarksPermissions = { permissions: ['bookmarks'] };
 const hostPermissions = { origins: ['*://*/*'] };
 
@@ -142,10 +150,14 @@ async function createContextMenusObject() {
 	const linkIsEnabled = target === targets.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
 	const pageIsEnabled = target === targets.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
 	const selectionIsEnabled = target === targets.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
+	const sidebarIsEnabled = target === targets.ask || currentSettings[storageKeys.sidebar] === undefined ? true : currentSettings[storageKeys.sidebar];
+	const tabIsEnabled = target === targets.ask || currentSettings[storageKeys.tab] === undefined ? true : currentSettings[storageKeys.tab];
 	const viewSourceFromBookmarkIsEnabled = hasBookmarkPermission && (target === targets.ask || currentSettings[storageKeys.viewSourceFromBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceFromBookmark]);
 	const viewSourceLinkIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
 	const viewSourcePageIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
 	const viewSourceSelectionIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
+	const viewSourceSidebarIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceSidebar] === undefined ? true : currentSettings[storageKeys.viewSourceSidebar];
+	const viewSourceTabIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceTab] === undefined ? true : currentSettings[storageKeys.viewSourceTab];
 
 	const contextMenusObject = {
 		http: {},
@@ -191,10 +203,11 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.http.page = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['http://*/*'],
 		id: httpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpMessage})`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.https && pageIsEnabled
 	};
 
@@ -203,6 +216,23 @@ async function createContextMenusObject() {
 		id: httpSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https && selectionIsEnabled
+	};
+
+	contextMenusObject.http.sidebar = {
+		contexts: ['page'],
+		documentUrlPatterns: ['http://*/*'],
+		id: httpSidebarId,
+		title: `${browser.i18n.getMessage('openThisSidebar')}(${useHttpMessage})`,
+		viewTypes: [browser.extension.ViewType.SIDEBAR],
+		visible: protocol !== protocols.https && sidebarIsEnabled
+	};
+
+	contextMenusObject.http.tab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['http://*/*'],
+		id: httpTabId,
+		title: `${browser.i18n.getMessage('openThisTab')}(${useHttpMessage})`,
+		visible: protocol !== protocols.https && tabIsEnabled
 	};
 
 	contextMenusObject.http.video = {
@@ -229,10 +259,11 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.http.viewSourcePage = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['http://*/*'],
 		id: viewSourceHttpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpMessage}`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.https && viewSourcePageIsEnabled
 	};
 
@@ -241,6 +272,23 @@ async function createContextMenusObject() {
 		id: viewSourceHttpSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpMessage}`,
 		visible: protocol !== protocols.https && viewSourceSelectionIsEnabled
+	};
+
+	contextMenusObject.http.viewSourceSidebar = {
+		contexts: ['page'],
+		documentUrlPatterns: ['http://*/*'],
+		id: viewSourceHttpSidebarionId,
+		title: `${browser.i18n.getMessage('openThisSidebar')}${viewSourceHttpMessage}`,
+		viewTypes: [browser.extension.ViewType.SIDEBAR],
+		visible: protocol !== protocols.https && viewSourceSidebarIsEnabled
+	};
+
+	contextMenusObject.http.viewSourceTab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['http://*/*'],
+		id: viewSourceHttpTabionId,
+		title: `${browser.i18n.getMessage('openThisTab')}${viewSourceHttpMessage}`,
+		visible: protocol !== protocols.https && viewSourceTabIsEnabled
 	};
 
 	// https
@@ -276,10 +324,11 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.https.page = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['*://*/*'],
 		id: httpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpsMessage})`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.http && pageIsEnabled
 	};
 
@@ -288,6 +337,23 @@ async function createContextMenusObject() {
 		id: httpsSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http && selectionIsEnabled
+	};
+
+	contextMenusObject.https.sidebar = {
+		contexts: ['page'],
+		documentUrlPatterns: ['*://*/*'],
+		id: httpsSidebarId,
+		title: `${browser.i18n.getMessage('openThisSidebar')}(${useHttpsMessage})`,
+		viewTypes: [browser.extension.ViewType.SIDEBAR],
+		visible: protocol !== protocols.http && sidebarIsEnabled
+	};
+
+	contextMenusObject.https.tab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['*://*/*'],
+		id: httpsTabId,
+		title: `${browser.i18n.getMessage('openThisTab')}(${useHttpsMessage})`,
+		visible: protocol !== protocols.http && tabIsEnabled
 	};
 
 	contextMenusObject.https.video = {
@@ -314,10 +380,11 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.https.viewSourcePage = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['*://*/*'],
 		id: viewSourceHttpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpsMessage}`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.http && viewSourcePageIsEnabled
 	};
 
@@ -326,6 +393,23 @@ async function createContextMenusObject() {
 		id: viewSourceHttpsSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpsMessage}`,
 		visible: protocol !== protocols.http && viewSourceSelectionIsEnabled
+	};
+
+	contextMenusObject.https.viewSourceSidebar = {
+		contexts: ['page'],
+		documentUrlPatterns: ['*://*/*'],
+		id: viewSourceHttpsSidebarionId,
+		title: `${browser.i18n.getMessage('openThisSidebar')}${viewSourceHttpsMessage}`,
+		viewTypes: [browser.extension.ViewType.SIDEBAR],
+		visible: protocol !== protocols.http && viewSourceSidebarIsEnabled
+	};
+
+	contextMenusObject.https.viewSourceTab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['*://*/*'],
+		id: viewSourceHttpsTabionId,
+		title: `${browser.i18n.getMessage('openThisTab')}${viewSourceHttpsMessage}`,
+		visible: protocol !== protocols.http && viewSourceTabIsEnabled
 	};
 
 	return contextMenusObject;
@@ -340,7 +424,38 @@ async function openInTheSidebar(info, tab) {
 	let url;
 
 	try {
-		browser.sidebarAction.open();
+		switch (info.menuItemId) {
+			case optionsId:
+			case tutorialId:
+			case httpsAudioId:
+			case httpsBookmarkId:
+			case httpsImageId:
+			case httpsLinkId:
+			case httpsPageId:
+			case httpsSelectionId:
+			case httpsTabId:
+			case httpsVideoId:
+			case viewSourceHttpsBookmarkId:
+			case viewSourceHttpsLinkId:
+			case viewSourceHttpsPageId:
+			case viewSourceHttpsSelectionId:
+			case viewSourceHttpsTabionId:
+			case httpAudioId:
+			case httpBookmarkId:
+			case httpImageId:
+			case httpLinkId:
+			case httpPageId:
+			case httpSelectionId:
+			case httpTabId:
+			case httpVideoId:
+			case viewSourceHttpBookmarkId:
+			case viewSourceHttpLinkId:
+			case viewSourceHttpPageId:
+			case viewSourceHttpSelectionId:
+			case viewSourceHttpTabionId:
+				browser.sidebarAction.open();
+				break;
+		}
 
 		switch (info.menuItemId) {
 			case tutorialId:
@@ -373,6 +488,16 @@ async function openInTheSidebar(info, tab) {
 			case httpsPageId:
 			case viewSourceHttpPageId:
 			case viewSourceHttpsPageId:
+			case httpSidebarId:
+			case httpsSidebarId:
+			case viewSourceHttpSidebarionId:
+			case viewSourceHttpsSidebarionId:
+				url = new URL(info.pageUrl);
+				break;
+			case httpTabId:
+			case httpsTabId:
+			case viewSourceHttpTabionId:
+			case viewSourceHttpsTabionId:
 				url = new URL(tab.url);
 				break;
 			case httpBookmarkId:
@@ -395,6 +520,8 @@ async function openInTheSidebar(info, tab) {
 			case httpsLinkId:
 			case httpsPageId:
 			case httpsSelectionId:
+			case httpsSidebarId:
+			case httpsTabId:
 			case httpsVideoId:
 				url.protocol = 'https';
 				break;
@@ -402,6 +529,8 @@ async function openInTheSidebar(info, tab) {
 			case viewSourceHttpsLinkId:
 			case viewSourceHttpsPageId:
 			case viewSourceHttpsSelectionId:
+			case viewSourceHttpsSidebarionId:
+			case viewSourceHttpsTabionId:
 				url.href = url.href.replace(/^view-source:/, '');
 				url.protocol = 'https';
 				url.href = `view-source:${url.href}`;
@@ -410,9 +539,20 @@ async function openInTheSidebar(info, tab) {
 			case viewSourceHttpLinkId:
 			case viewSourceHttpPageId:
 			case viewSourceHttpSelectionId:
+			case viewSourceHttpSidebarionId:
+			case viewSourceHttpTabionId:
 				if (!url.href.startsWith('view-source:')) {
 					url.href = `view-source:${url.href}`;
 				}
+				break;
+		}
+
+		switch (info.menuItemId) {
+			case httpSidebarId:
+			case httpsSidebarId:
+			case viewSourceHttpSidebarionId:
+			case viewSourceHttpsSidebarionId:
+				browser.tabs.create({ url: url.href });
 				break;
 		}
 	} catch (e) {
@@ -441,17 +581,48 @@ async function openInTheSidebar(info, tab) {
 		}
 	}
 
-	const setPanelParameters = {
-		panel: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href
-	};
+	switch (info.menuItemId) {
+		case optionsId:
+		case tutorialId:
+		case httpsAudioId:
+		case httpsBookmarkId:
+		case httpsImageId:
+		case httpsLinkId:
+		case httpsPageId:
+		case httpsSelectionId:
+		case httpsTabId:
+		case httpsVideoId:
+		case viewSourceHttpsBookmarkId:
+		case viewSourceHttpsLinkId:
+		case viewSourceHttpsPageId:
+		case viewSourceHttpsSelectionId:
+		case viewSourceHttpsTabionId:
+		case httpAudioId:
+		case httpBookmarkId:
+		case httpImageId:
+		case httpLinkId:
+		case httpPageId:
+		case httpSelectionId:
+		case httpTabId:
+		case httpVideoId:
+		case viewSourceHttpBookmarkId:
+		case viewSourceHttpLinkId:
+		case viewSourceHttpPageId:
+		case viewSourceHttpSelectionId:
+		case viewSourceHttpTabionId:
+			const setPanelParameters = {
+				panel: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href
+			};
 
-	if (currentSettings[storageKeys.placement] === placements.tab) {
-		setPanelParameters.tabId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].id;
-	} else if (currentSettings[storageKeys.placement] === placements.window) {
-		setPanelParameters.windowId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].windowId;
+			if (currentSettings[storageKeys.placement] === placements.tab) {
+				setPanelParameters.tabId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].id;
+			} else if (currentSettings[storageKeys.placement] === placements.window) {
+				setPanelParameters.windowId = (await browser.tabs.query({ active: true, currentWindow: true }))[0].windowId;
+			}
+
+			browser.sidebarAction.setPanel(setPanelParameters);
+			break;
 	}
-
-	browser.sidebarAction.setPanel(setPanelParameters);
 }
 
 async function readValues() {

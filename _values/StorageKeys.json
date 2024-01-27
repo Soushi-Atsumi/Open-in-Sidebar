@@ -15,9 +15,13 @@
 
 	"selection": "Selection",
 
+	"sidebar": "Sidebar",
+
 	"specify": "Specify",
 	
 	"sync": "Sync",
+
+	"tab": "Tab",
 
 	"target": "Target",
 
@@ -31,5 +35,9 @@
 
 	"viewSourcePage": "ViewSourcePage",
 
-	"viewSourceSelection": "ViewSourceSelection"
+	"viewSourceSelection": "ViewSourceSelection",
+
+	"viewSourceSidebar": "ViewSourceSidebar",
+
+	"viewSourceTab": "ViewSourceTab"
 }

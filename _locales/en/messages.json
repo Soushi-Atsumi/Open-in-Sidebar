@@ -109,6 +109,14 @@
 		"message": "Open from a selection"
 	},
 
+	"openFromSidebar": {
+		"message": "Open from the sidebar"
+	},
+
+	"openFromTab": {
+		"message": "Open from a tab"
+	},
+
 	"openOptions": {
 		"message": "Open options"
 	},
@@ -135,6 +143,14 @@
 
 	"openThisSelection": {
 		"message": "Open this selection"
+	},
+
+	"openThisSidebar": {
+		"message": "Open this sidebar"
+	},
+
+	"openThisTab": {
+		"message": "Open this tab"
 	},
 
 	"openThisVideo": {
@@ -264,6 +280,14 @@
 
 	"viewSourceFromSelection": {
 		"message": "View source of a selection"
+	},
+
+	"viewSourceFromSidebar": {
+		"message": "View source of the sidebar"
+	},
+
+	"viewSourceFromTab": {
+		"message": "View source of a tab"
 	},
 
 	"watchTheVideo": {
