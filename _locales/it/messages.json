@@ -1,0 +1,300 @@
+{
+	"additionalPermissions": {
+		"message": "Permessi aggiuntivi"
+	},
+
+	"all": {
+		"message": "Globale"
+	},
+
+	"alwaysUsesHttp": {
+		"message": "Usa sempre http"
+	},
+
+	"alwaysUsesHttps": {
+		"message": "Usa sempre https"
+	},
+
+	"ask": {
+		"message": "Chiedi"
+	},
+
+	"bookmarks": {
+		"message": "leggere e modificare i segnalibri"
+	},
+
+	"default": {
+		"message": "Predefinito"
+	},
+
+	"enabled": {
+		"message": "Abilitata"
+	},
+
+	"errorHTMLTitle": {
+		"message": "Errore",
+		"description": "The title of error.html."
+	},
+
+	"extensionDescription": {
+		"message": "Apri un link nella barra laterale.",
+		"description": "Description of the extension."
+	},
+
+	"extensionName": {
+		"message": "Apri nella barra laterale",
+		"description": "Name of the extension."
+	},
+
+	"host": {
+		"message": "accedere ai dati dei siti web"
+	},
+
+	"iconImageAlt": {
+		"message": "L'icona di questa estensione.",
+		"description": "The alternate description of the icon of this extention."
+	},
+
+	"indexHTMLCaution": {
+		"message": "Nota: selezionando un url con protocollo https, sarà privilegiata l'opzione https anche se si sceglie http.",
+		"description": "Cautions of this extention."
+	},
+
+	"indexHTMLHeading1": {
+		"message": "1. Cliccare con il tasto destro del mouse su un link o la selezione di un url in formato testo e selezionare \"Apri nella barra laterale\" nel menu contestuale.",
+		"description": "The first heading of index.html."
+	},
+
+	"indexHTMLHeading2": {
+		"message": "2. Scegliere e cliccare sulla voce che si desidera aprire (usare https in caso di dubbi).",
+		"description": "The second heading of index.html."
+	},
+
+	"indexHTMLOthers": {
+		"message": "Ad esempio si possono aprire nella barra laterale un audio, un'immagine, un video, un segnalibro o una scheda.",
+		"description": "others of index.html"
+	},
+
+	"indexHTMLTitle": {
+		"message": "Guida",
+		"description": "The title of index.html."
+	},
+
+	"indexHTMLTutorialVideo": {
+		"message": "https://drive.google.com/file/d/14tn0lZpNIybOt94NmpdqJvWPlKlnLjCm/view",
+		"description": "The url of tutorial video."
+	},
+
+	"initialLocation": {
+		"message": "Pagina iniziale"
+	},
+
+	"initialLocationDescription": {
+		"message": "Premere 'Invio' per salvare. Se lasciato vuoto si resetta allo stato predefinito."
+	},
+
+	"openFromBookmark": {
+		"message": "Apri da un segnalibro"
+	},
+
+	"openFromLink": {
+		"message": "Apri da un link"
+	},
+
+	"openFromPage": {
+		"message": "Apri da una pagina"
+	},
+
+	"openFromSelection": {
+		"message": "Apri da una selezione"
+	},
+
+	"openFromSidebar": {
+		"message": "Apri dalla barra laterale "
+	},
+
+	"openFromTab": {
+		"message": "Apri da una scheda"
+	},
+
+	"openOptions": {
+		"message": "Apri le opzioni"
+	},
+
+	"openThisAudio": {
+		"message": "Apri questo audio"
+	},
+
+	"openThisBookmark": {
+		"message": "Apri questo segnalibro"
+	},
+
+	"openThisImage": {
+		"message": "Apri questa immagine"
+	},
+
+	"openThisLink": {
+		"message": "Apri questo link"
+	},
+
+	"openThisPage": {
+		"message": "Apri questa pagina"
+	},
+
+	"openThisSelection": {
+		"message": "Apri questa selezione"
+	},
+
+	"openThisSidebar": {
+		"message": "Apri questa barra laterale"
+	},
+
+	"openThisTab": {
+		"message": "Apri questa scheda"
+	},
+
+	"openThisVideo": {
+		"message": "Apri questo video"
+	},
+
+	"openTutorial": {
+		"message": "Apri la guida"
+	},
+
+	"optionsHTMLTitle": {
+		"message": "Optioni",
+		"description": "The title of options.html."
+	},
+
+	"optionsUserAgentHTMLInformation": {
+		"message": "Questa funzionalità richiede il permesso di accedere ai dati dei siti web."
+	},
+
+	"optionsUserAgentHTMLCaution": {
+		"message": "Questo sovrascrive l'user agent ed influisce sulle pagine aperte nella barra laterale e relative estensioni."
+	},
+
+	"placement": {
+		"message": "Comportamento"
+	},
+
+	"placementAllCaution": {
+		"message": "Non ha effetto su barre laterali aperte con modalità 'Scheda' o 'Finestra' e viene sovrascritta da entrambe."
+	},
+
+	"placementAllDescription": {
+		"message": "Reimposta tutte le barre laterali."
+	},
+
+	"placementTabCaution": {
+		"message": "La modalità 'Scheda' può essere sovrascritta solo da se stessa."
+	},
+
+	"placementTabDescription": {
+		"message": "Reimposta la barra laterale sulla scheda corrente."
+	},
+
+	"placementWindowCaution": {
+		"message": "Non ha effetto su barre laterali aperte con modalità 'Scheda' e viene sovrascritta da se stessa o da 'Scheda'."
+	},
+
+	"placementWindowDescription": {
+		"message": "Reimposta le barre laterali sulla finestra corrente."
+	},
+
+	"protocol": {
+		"message": "Protocollo"
+	},
+
+	"reload": {
+		"message": "Ricarica"
+	},
+
+	"specify": {
+		"message": "Specifica"
+	},
+
+	"sidebarHTMLTitle": {
+		"message": "Guida",
+		"description": "The title of sidebar.html."
+	},
+
+	"synchronization": {
+		"message": "Sincronizzazione (account Mozilla)"
+	},
+
+	"tab": {
+		"message": "Scheda"
+	},
+
+	"target": {
+		"message": "Voci target menu"
+	},
+
+	"thisUrlIsNotAValidUrl": {
+		"message": "Questo non è un url valido."
+	},
+
+	"toggle": {
+		"message": "Apri/Chiudi"
+	},
+
+	"toolbarIconAction": {
+		"message": "Azione dell'icona sulla barra degli strumenti"
+	},
+
+	"tutorialTitle": {
+		"message": "Apri nella barra laterale - Guida",
+		"description": "The title of the tutorial."
+	},
+
+	"useHttp": {
+		"message": "Usa http",
+		"description": "Specify http"
+	},
+
+	"useHttps": {
+		"message": "Usa https",
+		"description": "Specify https"
+	},
+
+	"userAgent": {
+		"message": "User agent"
+	},
+
+	"viewSource": {
+		"message": "Visualizza sorgente pagina"
+	},
+
+	"viewSourceFromBookmark": {
+		"message": "Visualizza sorgente segnalibro"
+	},
+
+	"viewSourceFromLink": {
+		"message": "Visualizza sorgente link"
+	},
+
+	"viewSourceFromPage": {
+		"message": "Visualizza sorgente pagina"
+	},
+
+	"viewSourceFromSelection": {
+		"message": "Visualizza sorgente selezione"
+	},
+
+	"viewSourceFromSidebar": {
+		"message": "Visualizza sorgente barra laterale"
+	},
+
+	"viewSourceFromTab": {
+		"message": "Visualizza sorgente scheda"
+	},
+
+	"watchTheVideo": {
+		"message": "Guarda il video"
+	},
+
+	"window": {
+		"message": "Finestra"
+	}
+}
