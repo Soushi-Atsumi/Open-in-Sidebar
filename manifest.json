@@ -19,6 +19,9 @@
 
 	"browser_specific_settings": {
 		"gecko": {
+			"data_collection_permissions": {
+				"required": [ "none" ]
+			},
 			"id": "{23d6021a-cb48-47c8-bb14-980a69b6ea17}",
 			"strict_min_version": "77.0"
 		}
@@ -77,5 +80,5 @@
 		"default_panel": "sidebar/sidebar.html"
 	},
 
-	"version": "4.4"
+	"version": "4.4.1"
 }
